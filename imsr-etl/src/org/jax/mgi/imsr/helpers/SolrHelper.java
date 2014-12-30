@@ -55,10 +55,7 @@ public class SolrHelper {
 		} catch (SolrServerException e) {
 			e.printStackTrace();
 		}
-
 	}
-
-	
 	
 	
 }

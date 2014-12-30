@@ -115,10 +115,7 @@ public class MGDConnection {
     	
     	try {
 			while (results.next()) {
-				String synonym = results.getString("synonym");
-				String strain = results.getString("strain");
-				
-				resultHashMap.put(synonym, strain);
+				resultHashMap.put(results.getString("synonym"), results.getString("strain"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
