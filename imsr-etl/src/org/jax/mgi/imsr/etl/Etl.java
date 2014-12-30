@@ -82,18 +82,17 @@ public class Etl {
 		System.out.println("Collected strain nomenclatures: " + allNomenclaturesList.size());
 	}
 
-	private static void markReposForUpdate() {
-		// expected filename convention: <repo>_<date>.dat
-		
+	private static void markReposForUpdate() {		
 		for (File file : files) {
+			// expected filename convention: <repo>_<date>.dat
 			String fileNamePrefix = file.getName().toUpperCase().split("_")[0];
 			Repository repo = repos.findRepository(fileNamePrefix);
+			
 			if (repo != null) {
-				repo.setNeedsUpdate(true);
-				
 				// update using the latest repo file
 				file = Utilities.newerFile(file, repo.getFile());
 				repo.setFile(file);
+				repo.setNeedsUpdate(true);
 			} else {
 				throw new IllegalArgumentException("No repository with id: " + fileNamePrefix);
 			}
