@@ -28,7 +28,7 @@ public class SolrHelper {
 		}
 	}
 
-
+	
 	public static long getRepositoryStrainCountFromSolr(String repositoryId) {		
 		// http://stackoverflow.com/questions/5050746/solr-solrj-how-can-i-determine-the-total-number-of-documents-in-an-index
 		long strainCount = 0;
