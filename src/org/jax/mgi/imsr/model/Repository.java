@@ -557,8 +557,10 @@ public class Repository {
 			message += strains.size() + " strain" + Utilities.pluralSuffix(strains.size(), "has", "s have") + " been uploaded.\n";
 		}
 		
-		message += "This submission contained " + warningRecords.size() + " warning" + Utilities.pluralSuffix(warningRecords.size(), "", "s");
-		message += " and " + invalidRecords.size() + " entr" + Utilities.pluralSuffix(invalidRecords.size(), "y has", "ies have") + " been rejected due to errors.\n";
+		if (warningRecords.size() > 0 || invalidRecords.size() > 0) {
+			message += "This submission contained " + warningRecords.size() + " warning" + Utilities.pluralSuffix(warningRecords.size(), "", "s");
+			message += " and " + invalidRecords.size() + " entr" + Utilities.pluralSuffix(invalidRecords.size(), "y has", "ies have") + " been rejected due to errors.\n";
+		}
 		
 		if (invalidRecords.size() > 0) {
 			message += "\n" + "Attached is the IMSR file format guide for your reference.\n\nPlease resolve the error" + Utilities.pluralSuffix(invalidRecords.size(), "", "s") + " listed below and resubmit your submission file:\n";
