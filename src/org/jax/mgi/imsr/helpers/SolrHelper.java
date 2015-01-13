@@ -11,14 +11,26 @@ import org.jax.mgi.imsr.model.Solr3Strain;
 
 public class SolrHelper {
 	
-	//	 solr_servers = {LOCAL, TEST, PUBLIC}
-	private static SolrServer solrServer = new HttpSolrServer(Constants.SOLR_SERVERS.get("TEST"));
+	private SolrServer solrServer = null;
+	
+	public SolrHelper(String solrServerType) {
+		if (Constants.SOLR_SERVERS.containsKey(solrServerType)) {
+			String url = Constants.SOLR_SERVERS.get(solrServerType);
+			this.solrServer = new HttpSolrServer(url);
+		}
+	}
 	
 	
-	public static void dropRepositoryFromSolr(String repositoryId) {
+	/**
+	 * Deletes all solr documents associated with the repositoryId.
+	 * 
+	 * @param repositoryId	- specifies repository to delete from solr index
+	 * @see SolrServer
+	 */
+	public void dropRepositoryFromSolr(String repositoryId) {
 		System.out.println(repositoryId + ": Deleting old records.");
 		
-		try {
+		try {			
 			solrServer.deleteByQuery(String.format("provider:%s", repositoryId));
 			solrServer.commit();
 		} catch (SolrServerException e) {
@@ -29,10 +41,18 @@ public class SolrHelper {
 	}
 
 	
-	public static long getRepositoryStrainCountFromSolr(String repositoryId) {		
+	/**
+	 * Returns a count of solr documents for a given repository.
+	 * 
+	 * @param repositoryId	- repository to count strains
+	 * @return 				a count of strains from a specified repository
+	 * @see SolrServer
+	 * @see SolrQuery
+	 */
+	public long getRepositoryStrainCountFromSolr(String repositoryId) {		
 		// http://stackoverflow.com/questions/5050746/solr-solrj-how-can-i-determine-the-total-number-of-documents-in-an-index
 		long strainCount = 0;
-		try {
+		try {			
 			SolrQuery q = new SolrQuery("provider:" + repositoryId);
 			q.setRows(0);
 			strainCount = solrServer.query(q).getResults().getNumFound();
@@ -43,10 +63,16 @@ public class SolrHelper {
 	}
 
 
-	public static void writeStrainsToSolr(List<Solr3Strain> solrStrains) {
+	/**
+	 * Adds a list of strains to the solr index, as documents.
+	 * 
+	 * @param solrStrains 	- a list of strains (in JSON format) to be added to the index
+	 * @see SolrServer
+	 */
+	public void writeStrainsToSolr(List<Solr3Strain> solrStrains) {
 		System.out.println("Writing " + solrStrains.size() + " strains.");
 				
-		try {
+		try {			
 			solrServer.addBeans(solrStrains);
 			solrServer.optimize();
 			solrServer.commit();

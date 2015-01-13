@@ -6,8 +6,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.jax.mgi.imsr.helpers.Constants;
 import org.jax.mgi.imsr.helpers.MGDConnection;
+import org.jax.mgi.imsr.helpers.SolrHelper;
 import org.jax.mgi.imsr.helpers.Utilities;
 import org.jax.mgi.imsr.model.MgdAlleleMaps;
 import org.jax.mgi.imsr.model.MgiFeature;
@@ -26,27 +34,72 @@ public class Etl {
 	private static HashMap<String, String> withdrawnMarkersMap;
 	private static List<String> allNomenclaturesList;
 	private static List<File> files = new ArrayList<File>();
+	private static String[] cliFileNames = null;
+	private static String cliSolrServerType = null;
 
 	public Etl() {
 	}
 
 	public static void main(String[] args) throws Exception {
-		if (args.length == 0) {
-			System.out.println("No action taken - no files specified in args.");
-		} else {
-			
-			createFileList(args);
+		
+		if (parseCommandLine(args)) {
+			createFileList(cliFileNames);
 			collectCommonData();
 			markReposForUpdate();
-			updateRepos();
+			updateRepos(cliSolrServerType);
 
 			System.out.println("Completed indexing all repositories.");
 		}
 	}
 
+	private static boolean parseCommandLine(String[] args) {
+		Options options = new Options();
+		options.addOption("s", true, "solr server to write to [dev,test,public]");
+		
+		Option fileListOption = new Option("f", true, "list of files");
+		fileListOption.setArgs(Option.UNLIMITED_VALUES);
+		options.addOption(fileListOption);
+		
+		CommandLineParser parser = new GnuParser();
+		CommandLine line = null;
+				
+		try {
+			line = parser.parse(options, args);
+		} catch (ParseException exp) {
+			return commandLineErrorMessage(options, "Parsing failed.  Reason: " + exp.getMessage());
+		}
+		
+		if (line.hasOption("s")) {
+			cliSolrServerType = line.getOptionValue("s").toUpperCase();
+			if (!Constants.SOLR_SERVERS.containsKey(cliSolrServerType)) {
+				return commandLineErrorMessage(options, "Error: " + cliSolrServerType + " - is invalid server type.");
+			}
+		} else {
+			return commandLineErrorMessage(options, "No solr server argument provided - no action taken.");
+		}
+		
+		if (line.hasOption("f")) {
+			cliFileNames = line.getOptionValues("f");
+			if (cliFileNames.length == 0) {
+				return commandLineErrorMessage(options, "No files provided - no action taken.");
+			}
+		} else {
+			return commandLineErrorMessage(options, "No files provided - no action taken.");
+		}
+
+		return true;
+	}
+
+	private static boolean commandLineErrorMessage(Options options, String message) {
+		HelpFormatter formatter = new HelpFormatter();
+		
+		System.out.println(message);
+		formatter.printHelp( "imsretl", options );
+		return false;
+	}
 	
-	private static void createFileList(String[] args) {
-		for (String fileName : args) {
+	private static void createFileList(String[] fileNames) {
+		for (String fileName : fileNames) {
 			files.add(new File(fileName));
 		}
 	}
@@ -99,11 +152,13 @@ public class Etl {
 		}
 	}
 	
-	private static void updateRepos() throws IOException {
+	private static void updateRepos(String solrServerType) throws IOException {
 		HashMap<String, String> repoNomenclatureMap;
+		SolrHelper solrHelper = new SolrHelper(solrServerType);
 		
 		for (Repository repository : repos.getRepositories()) {
 			if (repository.getNeedsUpdate()) {
+				repository.setSolrHelper(solrHelper);
 				repository.importRecords();
 				repository.validateRecords(alleleMap, geneMap);
 				repository.transformRecords(alleleFeaturesMap, geneMap, recombinaseAlleleList, withdrawnMarkersMap);

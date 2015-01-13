@@ -54,6 +54,7 @@ public class Repository {
 	private Boolean needsUpdate = false;
 	private File file;
 	private String strainidprefix;
+	private SolrHelper solrHelper;
 
 	public Repository() {
 		// must have no-argument constructor
@@ -223,6 +224,10 @@ public class Repository {
 		this.contacts = contacts;
 	}
 	
+	public void setSolrHelper(SolrHelper solrHelper) {
+		this.solrHelper = solrHelper;
+	}
+
 	public static class Contacts {
 		// nested child elements
 		// link: http://www.coderanch.com/t/595215/XML/Unmarshalling-nested-child-elements-jaxb
@@ -493,7 +498,7 @@ public class Repository {
 	
 	
 	private void removeOldStrainsFromSolr() {
-		SolrHelper.dropRepositoryFromSolr(this.id);
+		solrHelper.dropRepositoryFromSolr(this.id);
 	}
 
 	
@@ -506,16 +511,16 @@ public class Repository {
 			solrStrains.add(new Solr3Strain(s, this));
 			
 			if (solrStrains.size() > Constants.MAX_STRAINS_TO_WRITE_TO_SOLR_AT_ONCE) {
-				SolrHelper.writeStrainsToSolr(solrStrains);
+				solrHelper.writeStrainsToSolr(solrStrains);
 				solrStrains.clear();
 			}
 		}
 		
-		SolrHelper.writeStrainsToSolr(solrStrains);
+		solrHelper.writeStrainsToSolr(solrStrains);
 	}
 
 	
-	public void loadStrainsIntoSolr() {
+	public void loadStrainsIntoSolr() {		
 		removeOldStrainsFromSolr();
 		addStrainsToSolr();		
 	}
@@ -648,7 +653,7 @@ public class Repository {
 		Double threshold = Constants.STRAIN_COUNT_THRESHOLD;
 		Boolean meetsThreshold = false;
 		Integer newStrainCount = this.strains.size();
-		Long currentStrainCount = SolrHelper.getRepositoryStrainCountFromSolr(this.id);
+		Long currentStrainCount = solrHelper.getRepositoryStrainCountFromSolr(this.id);
 		
 		if (currentStrainCount != 0) {
 			meetsThreshold = ((double)newStrainCount / (double)currentStrainCount) > threshold;		
