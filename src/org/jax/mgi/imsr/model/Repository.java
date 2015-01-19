@@ -526,22 +526,24 @@ public class Repository {
 	}
 
 	
-	public void emailUploadStatusReport() {
+	public void emailUploadStatusReport(Boolean sendPublicEmail) {
 		ImsrEmailContact imsrEmailAddress = new ImsrEmailContact(Constants.IMSR_EMAIL_CONTACT, Constants.IMSR_EMAIL_NAME);
 		
 		ImsrMailer email = new ImsrMailer();
 		email.setFrom(imsrEmailAddress.getEmail());
 		email.addCc(imsrEmailAddress);
 		
-//		Repository.Contacts contacts = this.getContacts();
-//		for (Contact c : contacts.getContact()) {
-//			if (c.isReportContact()) {
-//				email.addTo(new ImsrEmailContact(c.getContactEmail(), c.getContactName()));
-//			}
-//		}
-	
-		// for testing purposes only
-		email.addTo(new ImsrEmailContact("pay@motenko.us", "Howie Motenko"));
+		if (sendPublicEmail) {
+			Repository.Contacts contacts = this.getContacts();
+			for (Contact c : contacts.getContact()) {
+				if (c.isReportContact()) {
+					email.addTo(new ImsrEmailContact(c.getContactEmail(), c.getContactName()));
+				}
+			}
+		} else {
+			// for testing purposes only
+			email.addTo(new ImsrEmailContact("evilmail@motenko.us", "Howie Motenko"));			
+		}	
 		
 		Boolean meetsThreshold = meetsStrainCountThreshold();
 		Boolean validDataFile = isValidForSolr() && meetsThreshold;
@@ -611,40 +613,37 @@ public class Repository {
 		message += "Howie Motenko\n";
 						
 		email.setMessage(message);
-		email.send();
-		
-//		System.out.print(message);
-		
+		email.send();		
 	}	
 		
-	public void emailImsrCuratorReport() {
-		ImsrEmailContact imsrEmailAddress = new ImsrEmailContact(Constants.IMSR_EMAIL_CONTACT, Constants.IMSR_EMAIL_NAME);
-		ImsrEmailContact[] imsrCurators = Constants.IMSR_CURATORS_LIST;
-		List<Strain> strainsWithImsrMessages = this.getStrainsWithImsrMessages();
-		
-		if (strainsWithImsrMessages.size() > 0 && isValidForSolr()) {
-			ImsrMailer email = new ImsrMailer();
-			email.setFrom(imsrEmailAddress.getEmail());
-			email.addCc(imsrEmailAddress);
+	public void emailImsrCuratorReport(Boolean sendPublicEmail) {
+		if (sendPublicEmail) {		
+			ImsrEmailContact imsrEmailAddress = new ImsrEmailContact(Constants.IMSR_EMAIL_CONTACT, Constants.IMSR_EMAIL_NAME);
+			ImsrEmailContact[] imsrCurators = Constants.IMSR_CURATORS_LIST;
+			List<Strain> strainsWithImsrMessages = this.getStrainsWithImsrMessages();
 			
-			email.setSubjet("IMSR file submission: " + this.file.getName());
-
-			for (ImsrEmailContact c : imsrCurators) {
-				email.addTo(c);
-			}
-			
-			String message = "";
-			message += "When uploading the submission file: " + this.file.getName() + " there " + Utilities.pluralSuffix(strainsWithImsrMessages.size(), "is ", "are ");
-			message += strainsWithImsrMessages.size() + " strain" + Utilities.pluralSuffix(strainsWithImsrMessages.size(), "", "s") + " listed below for your review.\n\n";
+			if (strainsWithImsrMessages.size() > 0 && isValidForSolr()) {
+				ImsrMailer email = new ImsrMailer();
+				email.setFrom(imsrEmailAddress.getEmail());
+				email.addCc(imsrEmailAddress);
+				
+				email.setSubjet("IMSR file submission: " + this.file.getName());
 	
-			for (Strain s : strainsWithImsrMessages) {
-				message += "Strain ID: " + s.getId() + " " + s.getImsrMessage() + "\n";
+				for (ImsrEmailContact c : imsrCurators) {
+					email.addTo(c);
+				}
+				
+				String message = "";
+				message += "When uploading the submission file: " + this.file.getName() + " there " + Utilities.pluralSuffix(strainsWithImsrMessages.size(), "is ", "are ");
+				message += strainsWithImsrMessages.size() + " strain" + Utilities.pluralSuffix(strainsWithImsrMessages.size(), "", "s") + " listed below for your review.\n\n";
+		
+				for (Strain s : strainsWithImsrMessages) {
+					message += "Strain ID: " + s.getId() + " " + s.getImsrMessage() + "\n";
+				}
+				
+				email.setMessage(message);
+				email.send();
 			}
-			
-			email.setMessage(message);
-			email.send();
-			
-//			System.out.print(message);
 		}
 	}
 

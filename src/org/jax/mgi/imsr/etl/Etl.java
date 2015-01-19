@@ -174,8 +174,9 @@ public class Etl {
 					}
 				}
 
-				repository.emailUploadStatusReport();
-				repository.emailImsrCuratorReport();
+				Boolean sendPublicEmail = cliSolrServerType.equals("PUBLIC");
+				repository.emailUploadStatusReport(sendPublicEmail);
+				repository.emailImsrCuratorReport(sendPublicEmail);
 			}
 		}
 	}
