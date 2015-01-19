@@ -32,7 +32,6 @@ public class SolrHelper {
 		
 		try {			
 			solrServer.deleteByQuery(String.format("provider:%s", repositoryId));
-			solrServer.commit();
 		} catch (SolrServerException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -75,7 +74,6 @@ public class SolrHelper {
 		try {			
 			solrServer.addBeans(solrStrains);
 			solrServer.optimize();
-			solrServer.commit();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (SolrServerException e) {
@@ -83,5 +81,17 @@ public class SolrHelper {
 		}
 	}
 	
+	/**
+	 * Commits any solr changes
+	 */
+	public void solrCommit() {
+		try {
+			solrServer.commit();
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }
