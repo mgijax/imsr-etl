@@ -28,5 +28,6 @@
 	<classpathentry kind="lib" path="/Users/motenko/dev/imsr-etl/lib/solr-4.8.1/dist/solrj-lib/slf4j-log4j12-1.7.6.jar"/>
 	<classpathentry kind="lib" path="/Users/motenko/dev/imsr-etl/lib/solr-4.8.1/dist/solrj-lib/wstx-asl-3.2.7.jar"/>
 	<classpathentry kind="lib" path="/Users/motenko/dev/imsr-etl/lib/solr-4.8.1/dist/solrj-lib/zookeeper-3.4.6.jar"/>
+	<classpathentry kind="lib" path="/Users/motenko/dev/imsr-etl/lib/javax.mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
