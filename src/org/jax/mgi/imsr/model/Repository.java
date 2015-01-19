@@ -523,7 +523,6 @@ public class Repository {
 	public void loadStrainsIntoSolr() {		
 		removeOldStrainsFromSolr();
 		addStrainsToSolr();
-		solrHelper.solrCommit();
 	}
 
 	
