@@ -18,6 +18,10 @@ public class URLHelper {
         URL u = new URL(url);
         HttpURLConnection connection = (HttpURLConnection)u.openConnection();
         
+// TODO: add connection timeouts
+//        connection.setConnectTimeout(10000);
+//        connection.setReadTimeout(10000);
+        
         return connection.getResponseCode();
     }
 }
