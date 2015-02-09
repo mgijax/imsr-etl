@@ -151,7 +151,7 @@ public class Strain {
 		
 		MgiFeature allele = new MgiFeature(r.getMgiAlleleAccId(), r.getAlleleSymbol(), r.getAlleleName());
 		MgiFeature gene = new MgiFeature(r.getMgiGeneAccId(), r.getGeneSymbol(), r.getGeneName());		
-		this.mutations.add(new Mutation(r.getMutationType(), allele, gene));	
+		this.mutations.add(new Mutation(r.getMutationTypes(), allele, gene));	
 	}
 
 	

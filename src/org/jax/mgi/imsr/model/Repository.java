@@ -347,7 +347,7 @@ public class Repository {
 		}
 		
 		if (values.length > 7 + urlOffset) {
-			record.setMutationType(values[7 +urlOffset].toUpperCase());
+			record.setMutationTypes(valuesIntoSet(values[7 +urlOffset].toUpperCase()));
 		}
 		
 		if (values.length > 8 + urlOffset) {
@@ -388,7 +388,7 @@ public class Repository {
 			r.transformAllele(alleleFeaturesMap, recombinaseAlleleList);
 			r.transformGene(geneMap, withdrawnMarkersMap);
 			
-			r.setMutationType(Constants.MUTATION_TYPES.get(r.getMutationType()));
+			r.setMutationTypes(expandAbbreviations(Constants.MUTATION_TYPES, r.getMutationTypes()));
 			r.setStates(expandAbbreviations(Constants.STRAIN_STATES, r.getStates()));
 			r.setTypes(expandAbbreviations(Constants.STRAIN_TYPES, r.getTypes()));
 		}		
@@ -547,7 +547,8 @@ public class Repository {
 		
 		Boolean meetsThreshold = meetsStrainCountThreshold();
 		Boolean validDataFile = isValidForSolr() && meetsThreshold;
-		String subjectStatus = validDataFile ? "Succeeded" : "FAILED";
+		String subjectStatus = sendPublicEmail ? "" : "TEST - ";
+		subjectStatus += validDataFile ? "Succeeded" : "FAILED";
 		email.setSubjet(subjectStatus + " - IMSR file submission: " + this.file.getName());
 
 		List<Record> warningRecords = this.getRecordsWithWarnings();

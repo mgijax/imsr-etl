@@ -19,7 +19,7 @@ public class Record {
 	private String mgiAlleleAccId;
 	private String alleleSymbol;
 	private String alleleName;
-	private String mutationType;
+	private Set<String> mutationTypes;
 	private String chromosome;
 	private String mgiGeneAccId;
 	private String geneSymbol;
@@ -64,8 +64,8 @@ public class Record {
 		return alleleName;
 	}
 	
-	public String getMutationType() {
-		return mutationType;
+	public Set<String> getMutationTypes() {
+		return mutationTypes;
 	}
 	
 	public String getChromosome() {
@@ -144,8 +144,16 @@ public class Record {
 		this.alleleName = alleleName;
 	}
 
-	public void setMutationType(String mutationType) {
-		this.mutationType = mutationType;
+	public void addMutationType(String mutationType) {
+		if (mutationType != null && Constants.MUTATION_TYPES.containsKey(mutationType)) {
+			mutationTypes.add(mutationType);
+		} else {
+			System.out.println("ERROR: Mutation ype is invalid [" +  mutationType);
+		}
+	}
+
+	public void setMutationTypes(Set<String> mutationTypes) {
+		this.mutationTypes = mutationTypes;
 	}
 
 	public void setChromosome(String chromosome) {
@@ -170,7 +178,7 @@ public class Record {
 				+ ", states=" + states.toString() + ", url=" + url + ", mgiAlleleAccId="
 				+ mgiAlleleAccId + ", alleleSymbol=" + alleleSymbol
 				+ ", alleleName=" + alleleName + ", mutations="
-				+ mutationType.toString() + ", chromosome=" + chromosome
+				+ mutationTypes.toString() + ", chromosome=" + chromosome
 				+ ", mgiGeneAccId=" + mgiGeneAccId + ", geneSymbol="
 				+ geneSymbol + ", geneName=" + geneName + ", isValid=" + isValid() + "]";
 	}
@@ -242,9 +250,9 @@ public class Record {
 
 	
 	public void validateMutationType() {
-		if (this.mutationType != null && !this.mutationType.isEmpty()) {
-			if (Constants.MUTATION_TYPES.keySet().contains(getMutationType()) == false) {
-				this.addWarning("Strain Mutation Type: contains an invalid mutation type: [" + getMutationType().toString() + "]");
+		if (this.mutationTypes != null && !this.mutationTypes.isEmpty()) {
+			if (Constants.MUTATION_TYPES.keySet().contains(getMutationTypes()) == false) {
+				this.addWarning("Strain Mutation Type: contains an invalid mutation type: [" + getMutationTypes().toString() + "]");
 			}	
 		}
 	}
@@ -270,7 +278,7 @@ public class Record {
 			alleleName = alleleMap.get(mgiAlleleAccId).getName();
 			
 			if (recombinaseAlleleList.contains(mgiAlleleAccId)) {
-				mutationType = "REC";
+				addMutationType("REC");
 			}
 		}
 	}

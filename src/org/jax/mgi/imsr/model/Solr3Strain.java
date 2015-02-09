@@ -57,7 +57,7 @@ public class Solr3Strain {
 	private Set<String> alleleIds = new HashSet<String>();
 	
 	@Field("mutations")
-	private Set<String> mutations = new HashSet<String>();
+	private Set<String> mutationTypes = new HashSet<String>();
 	
 	@Field("strain_associations")
 	private String associations;
@@ -87,7 +87,7 @@ public class Solr3Strain {
 			this.alleleNames.add(m.getAllele().getName());
 			this.alleleSymbols.add(m.getAllele().getSymbol());
 			this.alleleIds.add(m.getAllele().getMgiId());
-			this.mutations.add(m.getType());
+			this.mutationTypes.addAll(m.getTypes());
 			
 			jsonMutations.put(createJsonMutation(m));			
 		}
@@ -106,7 +106,7 @@ public class Solr3Strain {
 			jsonMarker.put("mgiId", m.getGene().getMgiId());
 			
 			jsonAllele.put("marker", jsonMarker);
-			jsonAllele.put("mutation", m.getType());
+			jsonAllele.put("mutationTypes", m.getTypes());
 			jsonAllele.put("name", m.getAllele().getName());
 			jsonAllele.put("symbol", m.getAllele().getSymbol());
 			jsonAllele.put("mgiId", m.getAllele().getMgiId());
@@ -180,8 +180,8 @@ public class Solr3Strain {
 		return alleleIds;
 	}
 
-	public Set<String> getMutations() {
-		return mutations;
+	public Set<String> getMutationTypes() {
+		return mutationTypes;
 	}
 
 	public String getAssociations() {

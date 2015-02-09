@@ -1,19 +1,21 @@
 package org.jax.mgi.imsr.model;
 
+import java.util.Set;
+
 public class Mutation {
 	
-	private String type;
+	private Set<String> types;
 	private MgiFeature allele;
 	private MgiFeature gene;
 
-	public Mutation(String string, MgiFeature allele, MgiFeature gene) {
-		this.type = string;
+	public Mutation(Set<String> types, MgiFeature allele, MgiFeature gene) {
+		this.types = types;
 		this.allele = allele;
 		this.gene = gene;
 	}
 
-	public String getType() {
-		return type;
+	public Set<String> getTypes() {
+		return types;
 	}
 
 	public MgiFeature getAllele() {
