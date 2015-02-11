@@ -251,7 +251,7 @@ public class Record {
 	
 	public void validateMutationType() {
 		if (this.mutationTypes != null && !this.mutationTypes.isEmpty()) {
-			if (Constants.MUTATION_TYPES.keySet().contains(getMutationTypes()) == false) {
+			if (Constants.MUTATION_TYPES.keySet().containsAll(getMutationTypes()) == false) {
 				this.addWarning("Strain Mutation Type: contains an invalid mutation type: [" + getMutationTypes().toString() + "]");
 			}	
 		}
