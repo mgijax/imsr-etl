@@ -18,6 +18,7 @@ import org.jax.mgi.imsr.model.MgiFeature;
 public class MGDConnection {
 
 	private static String url = "jdbc:postgresql://adhoc.informatics.jax.org/mgd";
+//	private static String url = "jdbc:postgresql://mgi-adhoc.jax.org/mgd";
 	
     /**
      * Runs a sql query on server (adhoc) and returns a result set.
@@ -175,6 +176,11 @@ public class MGDConnection {
     	return simpleListQuery(query, "accid");
 	}
 
+    /**
+     * Returns a hash map of all strains and their associated synonyms.
+     * 
+     * @return	a hash map of <strain, list of synonyms> for all strains
+     */
     public static HashMap<String, List<String>> getSynonyms() {
 		HashMap<String, List<String>> resultHashMap = new HashMap<String, List<String>> ();
     	String query = "SELECT syn.synonym, str.strain " +
@@ -199,9 +205,16 @@ public class MGDConnection {
     	return resultHashMap;
     }
 
+	/**
+	 * Returns two hash maps of alleles and associated information:
+	 * 	(1) alleleFeatureMap - a hash map of <accid, <allele symbol, allele name>> for all alleles
+	 * 	(2) alleleSymbolMap  - a hash map of <allele symbol, accid> for all alleles
+	 * 
+	 * @return	a hash map of <alleleFeatureMap, alleleSymbolMap> for all alleles
+	 */
 	public static MgdAlleleMaps getAlleleMaps() {
-		HashMap<String, MgiFeature> resultFeatureMap = new HashMap<String, MgiFeature>();
-		HashMap<String, String> resultSymbolMap = new HashMap<String, String>();
+		HashMap<String, MgiFeature> alleleFeatureMap = new HashMap<String, MgiFeature>();
+		HashMap<String, String> alleleSymbolMap = new HashMap<String, String>();
     	String query = "SELECT acc.accid, a.symbol, a.name " +
 		               "FROM ACC_Accession acc, ALL_Allele a " +
     			       "WHERE acc._mgitype_key = 11 " +
@@ -212,14 +225,14 @@ public class MGDConnection {
     		ResultSet results = executeQuery(query);
 			while (results.next()) {	
 				MgiFeature alleleDetail = new MgiFeature(results.getString("symbol"), results.getString("name"));
-				resultFeatureMap.put(results.getString("accid"), alleleDetail);
-				resultSymbolMap.put(results.getString("symbol"), results.getString("accid"));
+				alleleFeatureMap.put(results.getString("accid"), alleleDetail);
+				alleleSymbolMap.put(results.getString("symbol"), results.getString("accid"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
     	
-		MgdAlleleMaps mgdAlleleMaps = new MgdAlleleMaps(resultFeatureMap, resultSymbolMap);
+		MgdAlleleMaps mgdAlleleMaps = new MgdAlleleMaps(alleleFeatureMap, alleleSymbolMap);
 		return mgdAlleleMaps;
 	}
 

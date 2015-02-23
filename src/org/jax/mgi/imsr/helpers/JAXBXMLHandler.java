@@ -11,7 +11,13 @@ import org.jax.mgi.imsr.model.Repositories;
 import org.jax.mgi.imsr.model.Repository;;
 
 public class JAXBXMLHandler {
-	// Importer
+	/**
+	 * Imports a list of repositories by unmarshalling repositories from an XML file based on the repository object. 
+	 * 
+	 * @param importFile	- an XML document containing repository information
+	 * @return				a list of repositories from the importFile
+	 * @throws JAXBException
+	 */
 	public static List<Repository> unmarshal(File importFile) throws JAXBException {
 		Repositories repositories = new Repositories();
 		

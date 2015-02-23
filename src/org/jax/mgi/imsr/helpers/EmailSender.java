@@ -14,6 +14,11 @@ public class EmailSender {
 	public static Boolean SSLOnConnect = false;
 	
 	
+	/**
+	 * Send email with contents based on imsrMail object.
+	 * 
+	 * @param imsrMail	- content information for sending an email
+	 */
 	public static void send(ImsrMailer imsrMail) {
 		MultiPartEmail email = new MultiPartEmail();
 
