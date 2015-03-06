@@ -17,8 +17,7 @@ import org.jax.mgi.imsr.model.MgiFeature;
 
 public class MGDConnection {
 
-	private static String url = "jdbc:postgresql://adhoc.informatics.jax.org/mgd";
-//	private static String url = "jdbc:postgresql://mgi-adhoc.jax.org/mgd";
+	private static String url = "jdbc:postgresql://mgi-adhoc.jax.org/mgd";
 	
     /**
      * Runs a sql query on server (adhoc) and returns a result set.
