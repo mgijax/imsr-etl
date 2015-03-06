@@ -649,15 +649,18 @@ public class Repository {
 	}
 
 	public boolean meetsStrainCountThreshold() {
-		// change has to be less than 7 percent, when submitting less strains
-		Double threshold = Constants.STRAIN_COUNT_THRESHOLD;
-		Boolean meetsThreshold = false;
+		Double threshold = Constants.STRAIN_PERCENT_THRESHOLD;
+		Boolean meetsThreshold;
 		Integer newStrainCount = this.strains.size();
 		Long currentStrainCount = solrHelper.getRepositoryStrainCountFromSolr(this.id);
 		
 		if (currentStrainCount != 0) {
 			meetsThreshold = ((double)newStrainCount / (double)currentStrainCount) > threshold;		
+		} else {
+			// new repository - no strains in solr
+			meetsThreshold = true;
 		}
+		
 		return meetsThreshold;
 	}
 

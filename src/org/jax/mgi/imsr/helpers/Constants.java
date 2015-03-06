@@ -9,7 +9,7 @@ import org.jax.mgi.imsr.model.ImsrEmailContact;
 public class Constants {
 	
 	// change has to be less than 7 percent, when submitting less strains for a repository 
-	public static final double STRAIN_COUNT_THRESHOLD = 0.93;
+	public static final double STRAIN_PERCENT_THRESHOLD = 0.93;
 	
 	// number of invalid records has to be less than 2 percent for passing as a valid repository submission
 	public static final double VALID_SUBMISSION_THRESHOLD = 0.02;
