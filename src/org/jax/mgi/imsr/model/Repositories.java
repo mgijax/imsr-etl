@@ -52,6 +52,8 @@ public class Repositories {
 		for (Repository r : this.repositories) {
             if (r.getId().equals(id)) {
             	return r;
+            } else if (r.getIdAlias() != null && r.getIdAlias().equals(id)) {
+            	return r;
             }
         }		
 		return null;

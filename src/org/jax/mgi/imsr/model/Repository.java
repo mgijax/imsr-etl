@@ -32,6 +32,7 @@ public class Repository {
 	
 	@XmlAttribute
 	private String id;
+	private String idalias;	
 	private Integer logicaldb;
 	private String strainurl;
 	private String orderurl;
@@ -66,6 +67,14 @@ public class Repository {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getIdAlias() {
+		return idalias;
+	}
+
+	public void setIdAlias(String idalias) {
+		this.idalias = idalias;
 	}
 
 	public Integer getLogicalDB() {
