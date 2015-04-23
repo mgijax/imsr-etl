@@ -137,11 +137,13 @@ public class Strain {
 
 	
 	public void addPrefixId(String strainidprefix) {
-		if (strainidprefix == null) {
-			strainidprefix = "";
+		String prefix = "";
+		
+		if (strainidprefix != null) {
+			prefix = strainidprefix + ":";
 		}
 		
-		this.prefixId = strainidprefix + ":" + this.id;		
+		this.prefixId = prefix + this.id;		
 	}
 
 
