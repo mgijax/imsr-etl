@@ -7,3 +7,8 @@
 *.dat
 /bin/**
 /imsretl.jar
+/new-imsretl.jar
+/test-imsretl.jar
+/tigm_2015_02_05_v6-3-noUrls.txt
+/TAC_20150826.txt
+/NRCMM_whole-list-20150730-IMSR.txt

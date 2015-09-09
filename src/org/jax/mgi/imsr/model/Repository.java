@@ -301,13 +301,15 @@ public class Repository {
 	}
 
 	public void importRecords() throws IOException {
-		// open file
+		// open file 
 		BufferedReader bReader = new BufferedReader(new FileReader(file));
 		
 		// populate strain object and add to repository
 		String line;
 		while ((line = bReader.readLine()) != null) {
-			this.addRecord(createRecord(line));
+			if (!line.trim().isEmpty()) {
+				this.addRecord(createRecord(line));
+			}
 		}
 		
 		bReader.close();
@@ -549,15 +551,11 @@ public class Repository {
 					email.addTo(new ImsrEmailContact(c.getContactEmail(), c.getContactName()));
 				}
 			}
-		} else {
-			// for testing purposes only
-			email.addTo(new ImsrEmailContact("evilmail@motenko.us", "Howie Motenko"));			
-		}	
+		} 
 		
 		Boolean meetsThreshold = meetsStrainCountThreshold();
 		Boolean validDataFile = isValidForSolr() && meetsThreshold;
-		String subjectStatus = sendPublicEmail ? "" : "TEST - ";
-		subjectStatus += validDataFile ? "Succeeded" : "FAILED";
+		String subjectStatus = validDataFile ? "Succeeded" : "FAILED";
 		email.setSubjet(subjectStatus + " - IMSR file submission: " + this.file.getName());
 
 		List<Record> warningRecords = this.getRecordsWithWarnings();
@@ -571,16 +569,16 @@ public class Repository {
 			message += "If you believe your submission is correct, please contact the IMSR staff to manaully override this warning.\n";
 			message += "Additional errors and warnings are listed below.\n\n";
 		} else {	
-			message += strains.size() + " strain" + Utilities.pluralSuffix(strains.size(), "has", "s have") + " been uploaded.\n";
+			message += strains.size() + Utilities.pluralSuffix(strains.size(), " strain has", " strains have") + " been uploaded.\n\n";
 		}
 		
 		if (warningRecords.size() > 0 || invalidRecords.size() > 0) {
-			message += "This submission contained " + warningRecords.size() + " warning" + Utilities.pluralSuffix(warningRecords.size(), "", "s");
-			message += " and " + invalidRecords.size() + " entr" + Utilities.pluralSuffix(invalidRecords.size(), "y has", "ies have") + " been rejected due to errors.\n";
+			message += "This submission contained " + warningRecords.size() + Utilities.pluralSuffix(warningRecords.size(), " warning", " warnings");
+			message += " and " + invalidRecords.size() + Utilities.pluralSuffix(invalidRecords.size(), " entry has", " entries have") + " been rejected due to errors.\n";
 		}
 		
 		if (invalidRecords.size() > 0) {
-			message += "\n" + "Attached is the IMSR file format guide for your reference.\n\nPlease resolve the error" + Utilities.pluralSuffix(invalidRecords.size(), "", "s") + " listed below and resubmit your submission file:\n";
+			message += "\n" + "Attached is the IMSR file format guide for your reference.\n\nPlease resolve the " + Utilities.pluralSuffix(invalidRecords.size(), "error", "errors") + " listed below and resubmit your submission file:\n";
 			
 			try {
 				ImsrEmailAttachment attachment = new ImsrEmailAttachment();
@@ -601,7 +599,7 @@ public class Repository {
 		}
 				
 		if (warningRecords.size() > 0) {
-			message += "\n" + "Please resolve the warning" + Utilities.pluralSuffix(warningRecords.size(), "", "s") + " listed below and resubmit your submission file:\n";
+			message += "\n" + "Please resolve the " + Utilities.pluralSuffix(warningRecords.size(), "warning", "warnings") + " listed below and resubmit your submission file:\n";
 		}
 		
 		for (Record r : warningRecords) {
@@ -611,7 +609,7 @@ public class Repository {
 		}
 		
 		if (validDataFile) {
-			message += "\n" + "The latest IMSR data for the " + this.name + " repository is available at this link:\n";
+			message += "\n" + "The latest IMSR data for the " + this.name + " repository is available at:\n";
 			message += "http://www.findmice.org/summary?query=&states=Any&_states=1&types=Any&_types=1&repositories=" + this.id + "&_repositories=1&_mutations=on \n"; 
 			message += "\n" + "Thank you for updating IMSR and helping ensure IMSR is accurate and relevant.\n";
 		} else {
@@ -622,8 +620,12 @@ public class Repository {
 		message += "\n\n" + "Gratefully,\n";
 		message += "Howie Motenko\n";
 						
-		email.setMessage(message);
-		email.send();		
+		if (sendPublicEmail) {
+			email.setMessage(message);
+			email.send();
+		} else {
+			System.out.println(message);
+		}
 	}	
 		
 	public void emailImsrCuratorReport(Boolean sendPublicEmail) {
@@ -645,7 +647,7 @@ public class Repository {
 				
 				String message = "";
 				message += "When uploading the submission file: " + this.file.getName() + " there " + Utilities.pluralSuffix(strainsWithImsrMessages.size(), "is ", "are ");
-				message += strainsWithImsrMessages.size() + " strain" + Utilities.pluralSuffix(strainsWithImsrMessages.size(), "", "s") + " listed below for your review.\n\n";
+				message += strainsWithImsrMessages.size() + Utilities.pluralSuffix(strainsWithImsrMessages.size(), " strain", " strains") + " listed below for your review.\n\n";
 		
 				for (Strain s : strainsWithImsrMessages) {
 					message += "Strain ID: " + s.getId() + " " + s.getImsrMessage() + "\n";
@@ -663,11 +665,11 @@ public class Repository {
 		Integer newStrainCount = this.strains.size();
 		Long currentStrainCount = solrHelper.getRepositoryStrainCountFromSolr(this.id);
 		
-		if (currentStrainCount != 0) {
-			meetsThreshold = ((double)newStrainCount / (double)currentStrainCount) > threshold;		
-		} else {
+		if (currentStrainCount == 0) {
 			// new repository - no strains in solr
 			meetsThreshold = true;
+		} else {
+			meetsThreshold = ((double)newStrainCount / (double)currentStrainCount) > threshold;		
 		}
 		
 		return meetsThreshold;
