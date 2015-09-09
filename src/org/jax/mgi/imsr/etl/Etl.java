@@ -36,6 +36,7 @@ public class Etl {
 	private static List<File> files = new ArrayList<File>();
 	private static String[] cliFileNames = null;
 	private static String cliSolrServerType = null;
+	private static Boolean cliSkipUrlTest = false;
 
 	public Etl() {
 	}
@@ -46,7 +47,7 @@ public class Etl {
 			createFileList(cliFileNames);
 			collectCommonData();
 			markReposForUpdate();
-			updateRepos(cliSolrServerType);
+			updateRepos(cliSolrServerType, cliSkipUrlTest);
 
 			System.out.println("Completed indexing all repositories.");
 		}
@@ -55,6 +56,7 @@ public class Etl {
 	private static boolean parseCommandLine(String[] args) {
 		Options options = new Options();
 		options.addOption("s", true, "solr server to write to [dev,test,public]");
+		options.addOption("noUrlTesting", false, "skip url validation testing");
 		
 		Option fileListOption = new Option("f", true, "list of files");
 		fileListOption.setArgs(Option.UNLIMITED_VALUES);
@@ -68,7 +70,7 @@ public class Etl {
 		} catch (ParseException exp) {
 			return commandLineErrorMessage(options, "Parsing failed.  Reason: " + exp.getMessage());
 		}
-		
+				
 		if (line.hasOption("s")) {
 			cliSolrServerType = line.getOptionValue("s").toUpperCase();
 			if (!Constants.SOLR_SERVERS.containsKey(cliSolrServerType)) {
@@ -86,6 +88,8 @@ public class Etl {
 		} else {
 			return commandLineErrorMessage(options, "No files provided - no action taken.");
 		}
+		
+		cliSkipUrlTest = line.hasOption("noUrlTesting");
 
 		return true;
 	}
@@ -152,7 +156,7 @@ public class Etl {
 		}
 	}
 	
-	private static void updateRepos(String solrServerType) throws IOException {
+	private static void updateRepos(String solrServerType, Boolean skipUrlTest) throws IOException {
 		HashMap<String, String> repoNomenclatureMap;
 		SolrHelper solrHelper = new SolrHelper(solrServerType);
 		
@@ -162,7 +166,10 @@ public class Etl {
 				repository.importRecords();
 				repository.validateRecords(alleleMap, geneMap);
 				repository.transformRecords(alleleFeaturesMap, geneMap, recombinaseAlleleList, withdrawnMarkersMap);
-				repository.testStrainUrls();
+				
+				if (!skipUrlTest) {
+					repository.testStrainUrls();
+				}
 
 				if (repository.isValidForSolr()) {
 					repoNomenclatureMap = MGDConnection.getRepoNomenclature(repository.getLogicalDB());
