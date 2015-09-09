@@ -226,9 +226,7 @@ public class Record {
 	public void validateStates() {
 		if (this.states == null || this.states.isEmpty()) {
 			this.addError("Strain State: is a required field");
-		}
-
-		if (Constants.STRAIN_STATES.keySet().containsAll(getStates()) == false) {
+		} else if (Constants.STRAIN_STATES.keySet().containsAll(getStates()) == false) {
 			this.addError("Strain State: contains an invalid state: [" + getStates().toString() + "]");
 		}
 	}
@@ -236,9 +234,7 @@ public class Record {
 	public void validateTypes() {
 		if (this.types == null || this.types.isEmpty()) {
 			this.addError("Strain Type: is a required field");
-		}
-
-		if (Constants.STRAIN_TYPES.keySet().containsAll(getTypes()) == false) {
+		} else if (Constants.STRAIN_TYPES.keySet().containsAll(getTypes()) == false) {
 			this.addError("Strain Type: contains an invalid type: [" + getTypes().toString() + "]");
 		}
 	}
