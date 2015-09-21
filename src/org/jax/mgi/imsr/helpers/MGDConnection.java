@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jax.mgi.imsr.model.MgdAlleleMaps;
+import org.jax.mgi.imsr.model.MgdMaps;
 import org.jax.mgi.imsr.model.MgiFeature;
 
 
@@ -205,34 +205,47 @@ public class MGDConnection {
     }
 
 	/**
+	 * Returns two hash maps of mgdType and associated information:
+	 * 	(1) mgdFeatureMap - a hash map of <accid, <mgd symbol, mgd name>> for all of mgdType
+	 * 	(2) mgdSymbolMap  - a hash map of <mgd symbol, accid> for all of mgdType
+	 * 
+	 * @return	a hash map of <mgdFeatureMap, mgdSymbolMap> for all of mgdType
+	 */
+	public static MgdMaps getMgdMaps(String query) {
+		HashMap<String, MgiFeature> mgdFeatureMap = new HashMap<String, MgiFeature>();
+		HashMap<String, String> mgdSymbolMap = new HashMap<String, String>();
+
+		try {
+    		ResultSet results = executeQuery(query);
+			while (results.next()) {	
+				MgiFeature mgdDetail = new MgiFeature(results.getString("symbol"), results.getString("name"));
+				mgdFeatureMap.put(results.getString("accid"), mgdDetail);
+				mgdSymbolMap.put(results.getString("symbol"), results.getString("accid"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	
+		MgdMaps mgdMaps = new MgdMaps(mgdFeatureMap, mgdSymbolMap);
+		return mgdMaps;
+	}
+
+	/**
 	 * Returns two hash maps of alleles and associated information:
 	 * 	(1) alleleFeatureMap - a hash map of <accid, <allele symbol, allele name>> for all alleles
 	 * 	(2) alleleSymbolMap  - a hash map of <allele symbol, accid> for all alleles
 	 * 
 	 * @return	a hash map of <alleleFeatureMap, alleleSymbolMap> for all alleles
 	 */
-	public static MgdAlleleMaps getAlleleMaps() {
-		HashMap<String, MgiFeature> alleleFeatureMap = new HashMap<String, MgiFeature>();
-		HashMap<String, String> alleleSymbolMap = new HashMap<String, String>();
+	public static MgdMaps getAlleleMaps() {
     	String query = "SELECT acc.accid, a.symbol, a.name " +
 		               "FROM ACC_Accession acc, ALL_Allele a " +
     			       "WHERE acc._mgitype_key = 11 " +
     			       "AND acc._object_key = a._allele_key " +
-    			       "AND acc.private = 0";
+    			       "AND acc.private = 0" +
+    			       "AND acc.prefixpart = 'MGI:'";
     	
-    	try {
-    		ResultSet results = executeQuery(query);
-			while (results.next()) {	
-				MgiFeature alleleDetail = new MgiFeature(results.getString("symbol"), results.getString("name"));
-				alleleFeatureMap.put(results.getString("accid"), alleleDetail);
-				alleleSymbolMap.put(results.getString("symbol"), results.getString("accid"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-    	
-		MgdAlleleMaps mgdAlleleMaps = new MgdAlleleMaps(alleleFeatureMap, alleleSymbolMap);
-		return mgdAlleleMaps;
+		return getMgdMaps(query);
 	}
 
 	/**
@@ -240,25 +253,15 @@ public class MGDConnection {
 	 * 
 	 * @return	a hash map of <accid, <gene symbol, gene name>> of all genes
 	 */
-	public static HashMap<String, MgiFeature> getGenes() {
-		HashMap<String, MgiFeature> resultFeatureMap = new HashMap<String, MgiFeature>();
-    	String query = "SELECT acc.accid, m.symbol, m.name " +
+	public static MgdMaps getGeneMaps() {
+		String query = "SELECT acc.accid, m.symbol, m.name " +
 		               "FROM ACC_Accession acc, MRK_Marker m " +
     			       "WHERE acc._mgitype_key = 2 " +
     			       "AND acc._object_key = m._marker_key " +
-    			       "AND acc.private = 0";
+    			       "AND acc.private = 0" +
+    			       "AND acc.prefixpart = 'MGI:'";
     	    	
-    	try {
-        	ResultSet results = executeQuery(query);
-			while (results.next()) {
-				MgiFeature geneDetails = new MgiFeature(results.getString("symbol"), results.getString("name"));
-				resultFeatureMap.put(results.getString("accid"), geneDetails);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-    	
-    	return resultFeatureMap;
+		return getMgdMaps(query);
 	}
 
 
