@@ -393,11 +393,11 @@ public class Repository {
 	}
 
 	
-	public void transformRecords(MgdAlleleMaps alleleFeaturesMap, HashMap<String, MgiFeature> geneMap, List<String> recombinaseAlleleList, HashMap<String, String> withdrawnMarkersMap) {		
+	public void transformRecords(MgdMaps alleleMgdMaps, MgdMaps geneMdgMaps, List<String> recombinaseAlleleList, HashMap<String, String> withdrawnMarkersMap) {		
 		for (Record r : records) {
 			r.transformUrl(this.strainurl);
-			r.transformAllele(alleleFeaturesMap, recombinaseAlleleList);
-			r.transformGene(geneMap, withdrawnMarkersMap);
+			r.transformAllele(alleleMgdMaps, recombinaseAlleleList);
+			r.transformGene(geneMdgMaps, withdrawnMarkersMap);
 			
 			r.setMutationTypes(expandAbbreviations(Constants.MUTATION_TYPES, r.getMutationTypes()));
 			r.setStates(expandAbbreviations(Constants.STRAIN_STATES, r.getStates()));

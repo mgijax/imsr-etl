@@ -257,12 +257,12 @@ public class Record {
 	 * Using allele accession id, replace symbol and name with mgi data and add recombinase mutation type (if needed).
 	 * If invalid allele acc id, use allele symbol to find acc id.
 	 * 
-	 * @param alleleFeaturesMap		- map of valid allele accession id's
+	 * @param alleleMgdMaps		- map of valid allele accession id's
 	 * @param recombinaseAlleleList	- mgi known allele recombinase list 
 	 */
-	public void transformAllele(MgdAlleleMaps alleleFeaturesMap, List<String> recombinaseAlleleList) {
-		HashMap<String, MgiFeature> alleleMap = alleleFeaturesMap.getFeatureMap();
-		HashMap<String, String> alleleSymbolMap = alleleFeaturesMap.getsymbolMap();
+	public void transformAllele(MgdMaps alleleMgdMaps, List<String> recombinaseAlleleList) {
+		HashMap<String, MgiFeature> alleleMap = alleleMgdMaps.getFeatureMap();
+		HashMap<String, String> alleleSymbolMap = alleleMgdMaps.getsymbolMap();
 
 		if (mgiAlleleAccId != null && !mgiAlleleAccId.isEmpty() && alleleMap.containsKey(mgiAlleleAccId)) {
 			// ignore repository information and use mgi data
@@ -278,7 +278,8 @@ public class Record {
 			// ignore repository information and use mgi data
 			alleleSymbol = alleleMap.get(mgiAlleleAccId).getSymbol();
 			alleleName = alleleMap.get(mgiAlleleAccId).getName();
-
+			
+			// add recombinase information
 			if (recombinaseAlleleList.contains(mgiAlleleAccId)) {
 				addMutationType("REC");
 			}
@@ -288,17 +289,27 @@ public class Record {
 	/**
 	 * Using gene accession id, replace symbol and name with mgi data and add withdrawn information (if needed).
 	 * 
-	 * @param geneMap				- map of valid gene accession id's
+	 * @param geneMgdMaps		- map of valid gene accession id's
 	 * @param withdrawnMarkersMap	- mgi list of withdrawn gene accession id's 
 	 */
-	public void transformGene(HashMap<String, MgiFeature> geneMap, HashMap<String, String> withdrawnMarkersMap) {
+	public void transformGene(MgdMaps geneMgdMaps, HashMap<String, String> withdrawnMarkersMap) {
+		HashMap<String, MgiFeature> geneMap = geneMgdMaps.getFeatureMap();
+		HashMap<String, String> geneSymbolMap = geneMgdMaps.getsymbolMap();
+
 		if (mgiGeneAccId != null && !mgiGeneAccId.isEmpty() && geneMap.containsKey(mgiGeneAccId)) {
-			// replace repository information with  mgi data
-			geneSymbol = geneMap.get(mgiGeneAccId).getSymbol();
-			geneName = geneMap.get(mgiGeneAccId).getName();
+			// ignore repository information and use mgi data
+		} else if (geneSymbol != null && !geneSymbol.isEmpty() && geneSymbolMap.containsKey(geneSymbol)) {
+			// find gene id, to create a valid link
+			mgiGeneAccId = geneSymbolMap.get(geneSymbol);
 		} else {
 			// prevent link to invalid gene accid
 			mgiGeneAccId = null;
+		}
+
+		if (mgiGeneAccId != null) {	
+			// replace repository information with  mgi data
+			geneSymbol = geneMap.get(mgiGeneAccId).getSymbol();
+			geneName = geneMap.get(mgiGeneAccId).getName();
 
 			// add withdrawn information
 			if (geneSymbol != null && !geneSymbol.isEmpty() && withdrawnMarkersMap.containsKey(geneSymbol)) {

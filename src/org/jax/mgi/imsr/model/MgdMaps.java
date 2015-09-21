@@ -2,11 +2,11 @@ package org.jax.mgi.imsr.model;
 
 import java.util.HashMap;
 
-public class MgdAlleleMaps {
+public class MgdMaps {
 	private HashMap<String, MgiFeature> featureMap;	
 	private HashMap<String, String> symbolMap;	
 	
-	public MgdAlleleMaps(HashMap<String, MgiFeature> featureMap, HashMap<String, String> symbolMap) {
+	public MgdMaps(HashMap<String, MgiFeature> featureMap, HashMap<String, String> symbolMap) {
 		this.featureMap = featureMap;
 		this.symbolMap = symbolMap;
 	}

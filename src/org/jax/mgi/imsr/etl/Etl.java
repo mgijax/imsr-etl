@@ -17,7 +17,7 @@ import org.jax.mgi.imsr.helpers.Constants;
 import org.jax.mgi.imsr.helpers.MGDConnection;
 import org.jax.mgi.imsr.helpers.SolrHelper;
 import org.jax.mgi.imsr.helpers.Utilities;
-import org.jax.mgi.imsr.model.MgdAlleleMaps;
+import org.jax.mgi.imsr.model.MgdMaps;
 import org.jax.mgi.imsr.model.MgiFeature;
 import org.jax.mgi.imsr.model.Repositories;
 import org.jax.mgi.imsr.model.Repository;
@@ -25,9 +25,10 @@ import org.jax.mgi.imsr.model.Repository;
 public class Etl {
 
 	private static Repositories repos = new Repositories();
-	private static MgdAlleleMaps alleleFeaturesMap;
+	private static MgdMaps alleleMgdMaps;
 	private static HashMap<String, MgiFeature> alleleMap;
 	private static List<String> recombinaseAlleleList;
+	private static MgdMaps geneMgdMaps;
 	private static HashMap<String, MgiFeature> geneMap;
 	private static HashMap<String, List<String>> synonymsMap;
 	private static HashMap<String, String> inverseSynonymsMap;
@@ -113,15 +114,16 @@ public class Etl {
 		repos.importRepositories(new File(Constants.REPOSITORY_META_DATA_FILENAME));
 
 		// get allele detail list
-		alleleFeaturesMap = MGDConnection.getAlleleMaps();
-		alleleMap = alleleFeaturesMap.getFeatureMap();
+		alleleMgdMaps = MGDConnection.getAlleleMaps();
+		alleleMap = alleleMgdMaps.getFeatureMap();
 		System.out.println("Collected alleles: " + alleleMap.size());
 
 		recombinaseAlleleList = MGDConnection.getRecombinaseAlleles();
 		System.out.println("Collected recombinase alleles: " + recombinaseAlleleList.size());
 
 		// get gene detail list
-		geneMap = MGDConnection.getGenes();
+		geneMgdMaps = MGDConnection.getGeneMaps();
+		geneMap = geneMgdMaps.getFeatureMap();
 		System.out.println("Collected genes: " + geneMap.size());
 
 		synonymsMap = MGDConnection.getSynonyms();
@@ -165,7 +167,7 @@ public class Etl {
 				repository.setSolrHelper(solrHelper);
 				repository.importRecords();
 				repository.validateRecords(alleleMap, geneMap);
-				repository.transformRecords(alleleFeaturesMap, geneMap, recombinaseAlleleList, withdrawnMarkersMap);
+				repository.transformRecords(alleleMgdMaps, geneMgdMaps, recombinaseAlleleList, withdrawnMarkersMap);
 				
 				if (!skipUrlTest) {
 					repository.testStrainUrls();
