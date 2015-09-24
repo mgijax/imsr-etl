@@ -287,7 +287,7 @@ public class Record {
 	}
 
 	/**
-	 * Using gene accession id, replace symbol and name with mgi data and add withdrawn information (if needed).
+	 * Using gene accession id, replace symbol and name with mgi data or add withdrawn information (if needed).
 	 * 
 	 * @param geneMgdMaps		- map of valid gene accession id's
 	 * @param withdrawnMarkersMap	- mgi list of withdrawn gene accession id's 
@@ -310,11 +310,9 @@ public class Record {
 			// replace repository information with  mgi data
 			geneSymbol = geneMap.get(mgiGeneAccId).getSymbol();
 			geneName = geneMap.get(mgiGeneAccId).getName();
-
-			// add withdrawn information
-			if (geneSymbol != null && !geneSymbol.isEmpty() && withdrawnMarkersMap.containsKey(geneSymbol)) {
-				geneName = withdrawnMarkersMap.get(geneSymbol);
-			}
+		} else if (geneSymbol != null && !geneSymbol.isEmpty() && withdrawnMarkersMap.containsKey(geneSymbol)) {
+			// add withdrawn information	
+			geneName = withdrawnMarkersMap.get(geneSymbol);
 		}
 	}
 
