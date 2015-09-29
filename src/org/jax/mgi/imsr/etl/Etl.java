@@ -3,6 +3,7 @@ package org.jax.mgi.imsr.etl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FilenameUtils;
+
 import org.jax.mgi.imsr.helpers.Constants;
 import org.jax.mgi.imsr.helpers.MGDConnection;
 import org.jax.mgi.imsr.helpers.SolrHelper;
@@ -34,7 +37,7 @@ public class Etl {
 	private static HashMap<String, String> inverseSynonymsMap;
 	private static HashMap<String, String> withdrawnMarkersMap;
 	private static List<String> allNomenclaturesList;
-	private static List<File> files = new ArrayList<File>();
+	private static List<File> files;
 	private static String[] cliFileNames = null;
 	private static String cliSolrServerType = null;
 	private static Boolean cliSkipUrlTest = false;
@@ -45,7 +48,6 @@ public class Etl {
 	public static void main(String[] args) throws Exception {
 		
 		if (parseCommandLine(args)) {
-			createFileList(cliFileNames);
 			collectCommonData();
 			markReposForUpdate();
 			updateRepos(cliSolrServerType, cliSkipUrlTest);
@@ -58,6 +60,7 @@ public class Etl {
 		Options options = new Options();
 		options.addOption("s", true, "solr server to write to [dev,test,public]");
 		options.addOption("noUrlTesting", false, "skip url validation testing");
+		options.addOption("d", true, "directory of files");
 		
 		Option fileListOption = new Option("f", true, "list of files");
 		fileListOption.setArgs(Option.UNLIMITED_VALUES);
@@ -81,14 +84,25 @@ public class Etl {
 			return commandLineErrorMessage(options, "No solr server argument provided - no action taken.");
 		}
 		
-		if (line.hasOption("f")) {
+		if (line.hasOption("d")) {
+			String cliDirectoryName = line.getOptionValue("d");
+			File cliDirectory = new File(cliDirectoryName);
+			
+			if (cliDirectory.isDirectory()) {
+				File[] filelist = cliDirectory.listFiles();
+				files = new ArrayList<File>(Arrays.asList(filelist));
+			}		
+		} else if (line.hasOption("f")) {
 			cliFileNames = line.getOptionValues("f");
-			if (cliFileNames.length == 0) {
+			if (cliFileNames.length > 0) {
+				createFileList(cliFileNames);
+			} else {
 				return commandLineErrorMessage(options, "No files provided - no action taken.");
 			}
 		} else {
 			return commandLineErrorMessage(options, "No files provided - no action taken.");
 		}
+		
 		
 		cliSkipUrlTest = line.hasOption("noUrlTesting");
 
@@ -103,10 +117,16 @@ public class Etl {
 		return false;
 	}
 	
-	private static void createFileList(String[] fileNames) {
+	private static List<File> createFileList(String[] fileNames) {
+		List<File> fileList = new ArrayList<File> ();
+		
 		for (String fileName : fileNames) {
-			files.add(new File(fileName));
+			File file = new File(fileName);
+			if (file.isFile()) {
+				fileList.add(file);
+			}
 		}
+		return fileList;
 	}
 
 	private static void collectCommonData() {
@@ -142,18 +162,26 @@ public class Etl {
 	}
 
 	private static void markReposForUpdate() {		
+		List<String> validFileNameExtensions = Arrays.asList("DAT", "TXT");
+		Repository repo = null;
+		
 		for (File file : files) {
 			// expected filename convention: <repo>_<date>.dat
-			String fileNamePrefix = file.getName().toUpperCase().split("_")[0];
-			Repository repo = repos.findRepository(fileNamePrefix);
+			String fileName = file.getName();
+			String fileNamePrefix = fileName.toUpperCase().split("_")[0];
 			
-			if (repo != null) {
-				// update using the latest repo file
-				file = Utilities.newerFile(file, repo.getFile());
-				repo.setFile(file);
-				repo.setNeedsUpdate(true);
-			} else {
-				throw new IllegalArgumentException("No repository with id: " + fileNamePrefix);
+			String ext = FilenameUtils.getExtension(fileName).toUpperCase();
+
+			if (validFileNameExtensions.contains(ext)) {
+				repo = repos.findRepository(fileNamePrefix);		
+				if (repo != null) {
+					// update using the latest repo file
+					file = Utilities.newerFile(file, repo.getFile());
+					repo.setFile(file);
+					repo.setNeedsUpdate(true);
+				} else {
+					throw new IllegalArgumentException("No repository with id: " + fileNamePrefix);
+				}
 			}
 		}
 	}
