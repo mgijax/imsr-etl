@@ -90,7 +90,7 @@ public class Constants {
 	{
 		Map<String,String> ssMap = new HashMap<String,String>();
 		ssMap.put("DEV", "http://localhost:48983/solr/imsr");
-		ssMap.put("TEST", "http://cardolan.informatics.jax.org:48983/solr/imsr");
+		ssMap.put("TEST", "http://bhmgiimsrtest-01LT.jax.org:48983/solr/imsr");
 		ssMap.put("PUBLIC", "http://bhmgiimsr01.jax.org:48983/solr/imsr");
 		SOLR_SERVERS = Collections.unmodifiableMap(ssMap);
 	}
