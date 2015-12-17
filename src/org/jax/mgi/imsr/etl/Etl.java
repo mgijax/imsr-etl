@@ -58,9 +58,10 @@ public class Etl {
 
 	private static boolean parseCommandLine(String[] args) {
 		Options options = new Options();
+		options.addOption("h", false, "print this message");
 		options.addOption("s", true, "solr server to write to [dev,test,public]");
 		options.addOption("noUrlTesting", false, "skip url validation testing");
-		options.addOption("d", true, "directory of files");
+		options.addOption("d", true, "directory of files, ");
 		
 		Option fileListOption = new Option("f", true, "list of files");
 		fileListOption.setArgs(Option.UNLIMITED_VALUES);
@@ -75,6 +76,15 @@ public class Etl {
 			return commandLineErrorMessage(options, "Parsing failed.  Reason: " + exp.getMessage());
 		}
 				
+		if (line.hasOption("h")) {
+			String header = "";
+			String footer = "\n Note: -d and -f can not be combined, must choose only one.";
+			HelpFormatter helpFormatter = new HelpFormatter();
+			helpFormatter.printHelp("imsr-etl", header, options, footer);
+
+			return false;
+		}
+		
 		if (line.hasOption("s")) {
 			cliSolrServerType = line.getOptionValue("s").toUpperCase();
 			if (!Constants.SOLR_SERVERS.containsKey(cliSolrServerType)) {
@@ -95,7 +105,7 @@ public class Etl {
 		} else if (line.hasOption("f")) {
 			cliFileNames = line.getOptionValues("f");
 			if (cliFileNames.length > 0) {
-				createFileList(cliFileNames);
+				files = createFileList(cliFileNames);
 			} else {
 				return commandLineErrorMessage(options, "No files provided - no action taken.");
 			}
