@@ -409,8 +409,10 @@ public class Repository {
 	private Set<String> expandAbbreviations(Map<String, String> abbreviationMap, Set<String> abbreviations) {
 		Set<String> result = new HashSet<String>();
 
-		for (String a : abbreviations) {
-			result.add(abbreviationMap.get(a));
+		if (abbreviations != null) {
+			for (String a : abbreviations) {
+				result.add(abbreviationMap.get(a));
+			}
 		}
 		
 		return result;
