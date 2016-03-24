@@ -83,29 +83,24 @@ public class Strain {
 	}
 	
 	public void addNomenclatureFlag(List<String> allNomenclaturesList, HashMap<String, String> repoNomenclatureMap, String repoId) {		
-		// Prerequisite: call the 'addSynonyms() method first
-		
-		Boolean foundSynonymInNomenclature = false;
+		String mgdMappedStrainName = repoNomenclatureMap.get(id);
+		Boolean foundStrainNameInMgd = allNomenclaturesList.contains(name);
 
-		for (String s : synonyms) {
-			foundSynonymInNomenclature |= allNomenclaturesList.contains(s);
-		}
-
-		if (allNomenclaturesList.contains(name)) {
-			// strain name uses approved nomenclature
+		if ((mgdMappedStrainName != null) && mgdMappedStrainName.equals(name)) {
+			// id maps to correct name in repo data (from mgd)
 			nomenclatureFlag = '+';
+		} else if (repoNomenclatureMap.containsKey(id) || foundStrainNameInMgd) {
+			// mgd has some information, but not a direct mapping
+			nomenclatureFlag = '-';
 			
-			if (!repoNomenclatureMap.containsValue(name)) {
+			if (foundStrainNameInMgd && !repoNomenclatureMap.containsValue(name)) {
 				imsrMessage = "with strain name: [" + name + "] is approved nomenclature, ";
 				imsrMessage += "however is not annotated to the " + repoId + " repository.";
 			}
-		} else if (foundSynonymInNomenclature) {
-				// strain name does not use approved nomenclature
-				nomenclatureFlag = '-';
 		} else {
-			// mgi doesn't know strain name
-			nomenclatureFlag = '?';
-		}			
+			// mgd doesn't contain strain name or strain id
+			nomenclatureFlag = '?';			
+		}		
 	}
 
 
