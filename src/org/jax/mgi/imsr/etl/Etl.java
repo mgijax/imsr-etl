@@ -41,6 +41,7 @@ public class Etl {
 	private static String[] cliFileNames = null;
 	private static String cliSolrServerType = null;
 	private static Boolean cliSkipUrlTest = false;
+	private static Boolean cliForce = false;
 
 	public Etl() {
 	}
@@ -50,7 +51,7 @@ public class Etl {
 		if (parseCommandLine(args)) {
 			collectCommonData();
 			markReposForUpdate();
-			updateRepos(cliSolrServerType, cliSkipUrlTest);
+			updateRepos(cliSolrServerType, cliSkipUrlTest, cliForce);
 
 			System.out.println("Completed indexing all repositories.");
 		}
@@ -62,6 +63,7 @@ public class Etl {
 		options.addOption("s", true, "solr server to write to [dev,test,public]");
 		options.addOption("noUrlTesting", false, "skip url validation testing");
 		options.addOption("d", true, "directory of files, ");
+		options.addOption("force", false, "always load file - regardless of errors");
 		
 		Option fileListOption = new Option("f", true, "list of files");
 		fileListOption.setArgs(Option.UNLIMITED_VALUES);
@@ -115,6 +117,10 @@ public class Etl {
 		
 		
 		cliSkipUrlTest = line.hasOption("noUrlTesting");
+		cliForce = line.hasOption("force");
+		if (cliForce) {
+			cliSkipUrlTest = true;
+		}
 
 		return true;
 	}
@@ -196,7 +202,7 @@ public class Etl {
 		}
 	}
 	
-	private static void updateRepos(String solrServerType, Boolean skipUrlTest) throws IOException {
+	private static void updateRepos(String solrServerType, Boolean skipUrlTest, Boolean cliForce) throws IOException {
 		HashMap<String, String> repoNomenclatureMap;
 		SolrHelper solrHelper = new SolrHelper(solrServerType);
 		
@@ -211,11 +217,11 @@ public class Etl {
 					repository.testStrainUrls();
 				}
 
-				if (repository.isValidForSolr()) {
+				if (repository.isValidForSolr() || cliForce) {
 					repoNomenclatureMap = MGDConnection.getRepoNomenclature(repository.getLogicalDB());
 
 					repository.aggregateStrains();
-					if (repository.meetsStrainCountThreshold()) {
+					if (repository.meetsStrainCountThreshold() || cliForce) {
 						repository.decorateStrains(synonymsMap, inverseSynonymsMap, allNomenclaturesList, repoNomenclatureMap);
 						repository.loadStrainsIntoSolr();
 					}
