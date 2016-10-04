@@ -328,7 +328,7 @@ public class Record {
 	}
 
 	/**
-	 * Check repsonse status code of url. If code is a warning or error, add warning or error
+	 * Check response status code of url. If code is a warning or error, add warning or error
 	 * to respective lists.
 	 */
 	public void testUrlConnection() {
