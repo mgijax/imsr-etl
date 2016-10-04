@@ -1,14 +1,10 @@
+*~
 /repos.xml
-/NRCMM_20140911_v4.txt
-/OBS_10_17_2013.txt
-/RMRC-NLAC_0902_2014.txt
+*.txt
 /lib/**
 **/.DS_Store
 *.dat
 /bin/**
-/imsretl.jar
-/new-imsretl.jar
-/test-imsretl.jar
-/tigm_2015_02_05_v6-3-noUrls.txt
-/TAC_20150826.txt
-/NRCMM_whole-list-20150730-IMSR.txt
+*.jar
+/Valid\ Upload\ Files/**
+/UploadFiles/**
