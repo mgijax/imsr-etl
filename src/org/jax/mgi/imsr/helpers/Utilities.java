@@ -38,4 +38,14 @@ public class Utilities {
 		return file1.lastModified() > file2.lastModified() ? file1 : file2;
 	}
 	
+	/**
+	 * Returns input string with non ASCII characters removed
+	 * 
+	 * @param inputString	- input string for removal of non-ASCII chars
+	 * @return string without non-ASCII chars
+	 */
+	public static String stripNonAsciiChars(String inputString) {
+		return inputString.replaceAll("[^\\x00-\\x7F]", "");
+	}
+	
 }

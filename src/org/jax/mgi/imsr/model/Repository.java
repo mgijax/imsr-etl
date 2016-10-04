@@ -307,6 +307,7 @@ public class Repository {
 		// populate strain object and add to repository
 		String line;
 		while ((line = bReader.readLine()) != null) {
+			line = Utilities.stripNonAsciiChars(line);
 			if (!line.trim().isEmpty()) {
 				this.addRecord(createRecord(line));
 			}
