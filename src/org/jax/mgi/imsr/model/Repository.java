@@ -306,93 +306,22 @@ public class Repository {
 		
 		// populate strain object and add to repository
 		String line;
+		Boolean containsStrainUrl = this.hasStrainUrl();
 		while ((line = bReader.readLine()) != null) {
 			line = Utilities.stripNonAsciiChars(line);
+			line = Utilities.stripDoubleQuotes(line);
 			if (!line.trim().isEmpty()) {
-				this.addRecord(createRecord(line));
+				this.addRecord(Record.createRecord(line, containsStrainUrl));
 			}
 		}
 		
 		bReader.close();
 	}
 
-	private Record createRecord(String line) {
-		Record record = new Record();
-		String values[] = line.replaceAll("\"", "").split("\t", -1);
-		
-		for (int i = 0; i < values.length; i++) {
-			values[i] = values[i].trim();
-		}
-		
-		Integer urlOffset = ((this.strainurl == null) || this.strainurl.isEmpty()) ? 1 : 0;
-		
-		if (values.length > 0) {
-			record.setId(values[0]);
-		}
-		
-		if (values.length > 1) {
-			record.setName(values[1]);
-		}
-		
-		if (values.length > 2) {
-			record.setTypes(valuesIntoSet(values[2].toUpperCase()));
-		}
-		
-		if (values.length > 3) {
-			record.setStates(valuesIntoSet(values[3].toUpperCase()));
-		}
-		
-		if (values.length > 4 && urlOffset == 1) {
-			record.setUrl(values[4]);
-		}
-		
-		if (values.length > 4 + urlOffset) {
-			record.setMgiAlleleAccId(values[4 + urlOffset]);
-		}
-		
-		if (values.length > 5 + urlOffset) {
-			record.setAlleleSymbol(values[5 + urlOffset]);
-		}
-		
-		if (values.length > 6 + urlOffset) {
-			record.setAlleleName(values[6 + urlOffset]);
-		}
-		
-		if (values.length > 7 + urlOffset) {
-			record.setMutationTypes(valuesIntoSet(values[7 +urlOffset].toUpperCase()));
-		}
-		
-		if (values.length > 8 + urlOffset) {
-			record.setChromosome(values[8 + urlOffset]);
-		}
-		
-		if (values.length > 9 + urlOffset) {
-			record.setMgiGeneAccId(values[9 + urlOffset]);
-		}
-		
-		if (values.length > 10 + urlOffset) {
-			record.setGeneSymbol(values[10 + urlOffset]);
-		}
-		
-		if (values.length > 11 + urlOffset) {
-			record.setGeneName(values[11 + urlOffset]);
-		}
-		
-		return record;
+	public Boolean hasStrainUrl() {
+		return ((this.strainurl == null) || this.strainurl.isEmpty()) ? false : true;
 	}
 	
-	private Set<String> valuesIntoSet(String values) {
-		Set<String> valueSet = new HashSet<String>();
-
-		for (String t : values.split(",|\\s")) {
-			if (!t.isEmpty()) {
-				valueSet.add(t);
-			}
-		}
- 		 
-		return valueSet;
-	}
-
 	
 	public void transformRecords(MgdMaps alleleMgdMaps, MgdMaps geneMdgMaps, List<String> recombinaseAlleleList, HashMap<String, String> withdrawnMarkersMap) {		
 		for (Record r : records) {

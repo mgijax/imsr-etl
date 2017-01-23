@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.jax.mgi.imsr.helpers.Constants;
 import org.jax.mgi.imsr.helpers.URLHelper;
+import org.jax.mgi.imsr.helpers.Utilities;
 
 public class Record {
 
@@ -171,18 +172,173 @@ public class Record {
 		this.geneName = geneName;
 	}
 
+
 	@Override
-	public String toString() {
-		return "Strain [id=" + id + ", name=" + name + ", types="
-				+ types.toString() + ", states=" + states.toString() + ", url="
-				+ url + ", mgiAlleleAccId=" + mgiAlleleAccId
-				+ ", alleleSymbol=" + alleleSymbol + ", alleleName="
-				+ alleleName + ", mutations=" + mutationTypes.toString()
-				+ ", chromosome=" + chromosome + ", mgiGeneAccId="
-				+ mgiGeneAccId + ", geneSymbol=" + geneSymbol + ", geneName="
-				+ geneName + ", isValid=" + isValid() + "]";
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Record other = (Record) obj;
+		if (alleleName == null) {
+			if (other.alleleName != null)
+				return false;
+		} else if (!alleleName.equals(other.alleleName))
+			return false;
+		if (alleleSymbol == null) {
+			if (other.alleleSymbol != null)
+				return false;
+		} else if (!alleleSymbol.equals(other.alleleSymbol))
+			return false;
+		if (chromosome == null) {
+			if (other.chromosome != null)
+				return false;
+		} else if (!chromosome.equals(other.chromosome))
+			return false;
+		if (errors == null) {
+			if (other.errors != null)
+				return false;
+		} else if (!errors.equals(other.errors))
+			return false;
+		if (geneName == null) {
+			if (other.geneName != null)
+				return false;
+		} else if (!geneName.equals(other.geneName))
+			return false;
+		if (geneSymbol == null) {
+			if (other.geneSymbol != null)
+				return false;
+		} else if (!geneSymbol.equals(other.geneSymbol))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (mgiAlleleAccId == null) {
+			if (other.mgiAlleleAccId != null)
+				return false;
+		} else if (!mgiAlleleAccId.equals(other.mgiAlleleAccId))
+			return false;
+		if (mgiGeneAccId == null) {
+			if (other.mgiGeneAccId != null)
+				return false;
+		} else if (!mgiGeneAccId.equals(other.mgiGeneAccId))
+			return false;
+		if (mutationTypes == null) {
+			if (other.mutationTypes != null)
+				return false;
+		} else if (!mutationTypes.equals(other.mutationTypes))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (states == null) {
+			if (other.states != null)
+				return false;
+		} else if (!states.equals(other.states))
+			return false;
+		if (types == null) {
+			if (other.types != null)
+				return false;
+		} else if (!types.equals(other.types))
+			return false;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
+			return false;
+		if (warnings == null) {
+			if (other.warnings != null)
+				return false;
+		} else if (!warnings.equals(other.warnings))
+			return false;
+		return true;
 	}
 
+	
+	@Override
+	public String toString() {
+		return "Record [id=" + id + ", name=" + name + ", types=" + types + ", states=" + states + ", url=" + url
+				+ ", mgiAlleleAccId=" + mgiAlleleAccId + ", alleleSymbol=" + alleleSymbol + ", alleleName=" + alleleName
+				+ ", mutationTypes=" + mutationTypes + ", chromosome=" + chromosome + ", mgiGeneAccId=" + mgiGeneAccId
+				+ ", geneSymbol=" + geneSymbol + ", geneName=" + geneName + ", errors=" + errors + ", warnings="
+				+ warnings + "]";
+	}
+
+	
+	
+	public static Record createRecord(String line, Boolean hasStrainUrl) {
+		Record record = new Record();
+		String values[] = line.split("\t", -1);
+		
+		for (int i = 0; i < values.length; i++) {
+			values[i] = values[i].trim();
+		}
+		
+		Integer urlOffset = (hasStrainUrl) ? 1 : 0;
+		
+		if (values.length > 0) {
+			record.setId(values[0]);
+		}
+		
+		if (values.length > 1) {
+			record.setName(values[1]);
+		}
+		
+		if (values.length > 2) {
+			record.setTypes(Utilities.valuesIntoSet(values[2].toUpperCase()));
+		}
+		
+		if (values.length > 3) {
+			record.setStates(Utilities.valuesIntoSet(values[3].toUpperCase()));
+		}
+		
+		if (values.length > 4 && urlOffset == 1) {
+			record.setUrl(values[4]);
+		}
+		
+		if (values.length > 4 + urlOffset) {
+			record.setMgiAlleleAccId(values[4 + urlOffset]);
+		}
+		
+		if (values.length > 5 + urlOffset) {
+			record.setAlleleSymbol(values[5 + urlOffset]);
+		}
+		
+		if (values.length > 6 + urlOffset) {
+			record.setAlleleName(values[6 + urlOffset]);
+		}
+		
+		if (values.length > 7 + urlOffset) {
+			record.setMutationTypes(Utilities.valuesIntoSet(values[7 +urlOffset].toUpperCase()));
+		}
+		
+		if (values.length > 8 + urlOffset) {
+			record.setChromosome(values[8 + urlOffset]);
+		}
+		
+		if (values.length > 9 + urlOffset) {
+			record.setMgiGeneAccId(values[9 + urlOffset]);
+		}
+		
+		if (values.length > 10 + urlOffset) {
+			record.setGeneSymbol(values[10 + urlOffset]);
+		}
+		
+		if (values.length > 11 + urlOffset) {
+			record.setGeneName(values[11 + urlOffset]);
+		}
+		
+		return record;
+	}
+
+	
+	
 	/**
 	 * Checks if gene accession id is a valid accession id.
 	 * Adds a warning to the record, if invalid.
