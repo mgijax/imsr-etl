@@ -306,12 +306,12 @@ public class Repository {
 		
 		// populate strain object and add to repository
 		String line;
-		Boolean containsStrainUrl = this.hasStrainUrl();
+		Boolean omitStrainUrl = this.hasStrainUrl();
 		while ((line = bReader.readLine()) != null) {
 			line = Utilities.stripNonAsciiChars(line);
 			line = Utilities.stripDoubleQuotes(line);
 			if (!line.trim().isEmpty()) {
-				this.addRecord(Record.createRecord(line, containsStrainUrl));
+				this.addRecord(Record.createRecord(line, omitStrainUrl));
 			}
 		}
 		

@@ -272,7 +272,7 @@ public class Record {
 
 	
 	
-	public static Record createRecord(String line, Boolean hasStrainUrl) {
+	public static Record createRecord(String line, Boolean omitStrainUrl) {
 		Record record = new Record();
 		String values[] = line.split("\t", -1);
 		
@@ -280,7 +280,7 @@ public class Record {
 			values[i] = values[i].trim();
 		}
 		
-		Integer urlOffset = (hasStrainUrl) ? 1 : 0;
+		Integer urlOffset = (omitStrainUrl) ? 0 : 1;
 		
 		if (values.length > 0) {
 			record.setId(values[0]);
@@ -298,7 +298,7 @@ public class Record {
 			record.setStates(Utilities.valuesIntoSet(values[3].toUpperCase()));
 		}
 		
-		if (values.length > 4 && urlOffset == 1) {
+		if (values.length > 4 && !omitStrainUrl) {
 			record.setUrl(values[4]);
 		}
 		
