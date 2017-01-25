@@ -211,7 +211,7 @@ public class MGDConnection {
 	 * 
 	 * @return	a hash map of <mgdFeatureMap, mgdSymbolMap> for all of mgdType
 	 */
-	public static MgdMaps getMgdMaps(String query) {
+	public static MgdMaps getMgdMaps(String query, Boolean lowercaseSymbol) {
 		HashMap<String, MgiFeature> mgdFeatureMap = new HashMap<String, MgiFeature>();
 		HashMap<String, String> mgdSymbolMap = new HashMap<String, String>();
 
@@ -220,7 +220,13 @@ public class MGDConnection {
 			while (results.next()) {	
 				MgiFeature mgdDetail = new MgiFeature(results.getString("symbol"), results.getString("name"));
 				mgdFeatureMap.put(results.getString("accid"), mgdDetail);
-				mgdSymbolMap.put(results.getString("symbol"), results.getString("accid"));
+				
+				String mappedSymbol = results.getString("symbol");
+				if (lowercaseSymbol) {
+					mappedSymbol = mappedSymbol.toLowerCase();
+				}
+				
+				mgdSymbolMap.put(mappedSymbol, results.getString("accid"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -235,6 +241,8 @@ public class MGDConnection {
 	 * 	(1) alleleFeatureMap - a hash map of <accid, <allele symbol, allele name>> for all alleles
 	 * 	(2) alleleSymbolMap  - a hash map of <allele symbol, accid> for all alleles
 	 * 
+	 * Note: allele symbol matches are case insensitive
+	 * 
 	 * @return	a hash map of <alleleFeatureMap, alleleSymbolMap> for all alleles
 	 */
 	public static MgdMaps getAlleleMaps() {
@@ -245,7 +253,8 @@ public class MGDConnection {
     			       "AND acc.private = 0" +
     			       "AND acc.prefixpart = 'MGI:'";
     	
-		return getMgdMaps(query);
+    	Boolean lowercaseSymbol = true;
+		return getMgdMaps(query, lowercaseSymbol);
 	}
 
 	/**
@@ -261,7 +270,8 @@ public class MGDConnection {
     			       "AND acc.private = 0" +
     			       "AND acc.prefixpart = 'MGI:'";
     	    	
-		return getMgdMaps(query);
+	   	Boolean lowercaseSymbol = false;
+		return getMgdMaps(query, lowercaseSymbol);
 	}
 
 

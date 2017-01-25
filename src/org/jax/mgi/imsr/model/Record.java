@@ -411,7 +411,7 @@ public class Record {
 
 	/**
 	 * Using allele accession id, replace symbol and name with mgi data and add recombinase mutation type (if needed).
-	 * If invalid allele acc id, use allele symbol to find acc id.
+	 * If invalid allele acc id, use allele symbol (lowercase) to find acc id.
 	 * 
 	 * @param alleleMgdMaps		- map of valid allele accession id's
 	 * @param recombinaseAlleleList	- mgi known allele recombinase list 
@@ -422,9 +422,9 @@ public class Record {
 
 		if (mgiAlleleAccId != null && !mgiAlleleAccId.isEmpty() && alleleMap.containsKey(mgiAlleleAccId)) {
 			// ignore repository information and use mgi data
-		} else if (alleleSymbol != null && !alleleSymbol.isEmpty() && alleleSymbolMap.containsKey(alleleSymbol)) {
+		} else if (alleleSymbol != null && !alleleSymbol.isEmpty() && alleleSymbolMap.containsKey(alleleSymbol.toLowerCase())) {
 			// find accession id, to create a valid link
-			mgiAlleleAccId = alleleSymbolMap.get(alleleSymbol);
+			mgiAlleleAccId = alleleSymbolMap.get(alleleSymbol.toLowerCase());
 		} else {
 			// prevent link to invalid allele accid
 			mgiAlleleAccId = null;
