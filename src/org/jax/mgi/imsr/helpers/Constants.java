@@ -32,6 +32,7 @@ public class Constants {
 	static
 	{
 		Map<String,String> ssMap = new HashMap<String,String>();
+		ssMap.put("CA", "archived");
 		ssMap.put("EM", "embryo");
 		ssMap.put("ES", "ES Cell");
 		ssMap.put("LM", "live");
