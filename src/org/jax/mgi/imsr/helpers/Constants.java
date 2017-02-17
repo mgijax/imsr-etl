@@ -50,11 +50,13 @@ public class Constants {
 		stMap.put("CON", "congenic strain");
 		stMap.put("CSS", "consomic or chromosome substitution strain");
 		stMap.put("IS", "inbred strain");		
+		stMap.put("HY", "hybrid");		
 		stMap.put("MAH", "major histocompatibility congenic");		
 		stMap.put("MIH", "minor histocompatibility congenic");		
 		stMap.put("MSK", "mutant stock");		
 		stMap.put("MSR", "mutant strain");		
 		stMap.put("NON", "noninbred stock");		
+		stMap.put("OUT", "outbred strain");		
 		stMap.put("RC", "recombinant congenic");		
 		stMap.put("RI", "recombinant inbred");		
 		stMap.put("SEG", "segregating inbred");		
