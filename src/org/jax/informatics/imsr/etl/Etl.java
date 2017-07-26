@@ -1,4 +1,4 @@
-package org.jax.mgi.imsr.etl;
+package org.jax.informatics.imsr.etl;
 
 import java.io.File;
 import java.io.IOException;
