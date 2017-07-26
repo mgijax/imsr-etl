@@ -50,6 +50,7 @@ public class Etl {
 	public Etl() {
 	}
 
+	// a new comment for testing git repo setup
 	public static void main(String[] args) throws Exception {
 		
 		if (parseCommandLine(args)) {
