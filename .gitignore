@@ -1,0 +1,11 @@
+*~
+/repos.xml
+*.txt
+/lib/**
+**/.DS_Store
+*.dat
+/bin/**
+*.jar
+/Valid\ Upload\ Files/**
+/UploadFiles/**
+/target/
