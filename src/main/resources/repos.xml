@@ -115,6 +115,43 @@
 	</Repository>
 
 
+	<Repository id="CHROMus">
+		<logicaldb>207</logicaldb>
+		<idalias>CHROMUS</idalias>
+		<strainidprefix>CHROMUS</strainidprefix>
+		<strainurl></strainurl>
+		<orderurl>http://chromus.vet.cornell.edu/the-teamcontact-us/</orderurl>
+		<homepage>http://chromus.vet.cornell.edu</homepage>
+		<name>Cornell Heart Lung Blood Resource for Optogenetic Mouse Signaling</name>
+		<address1>Cornell University</address1>
+		<address2>T4002 VRT</address2>
+		<address3>618 Tower Road</address3>
+		<city>Ithaca</city>
+		<state>NY</state>
+		<postalcode>14853</postalcode>
+		<country>USA</country>
+		<email>chromus@cornell.edu</email>
+		<phone></phone>
+		<fax></fax>
+		<contacts>
+			<contact>
+				<contact-name>Jane Lee</contact-name>
+				<contact-email>jcl54@cornell.edu</contact-email>
+				<contact-phone>607-253-4278</contact-phone>
+				<contact-report>true</contact-report>
+				<contact-type>research support specialist</contact-type>
+			</contact>
+			<contact>
+				<contact-name>Dr. Michael Kotlikoff</contact-name>
+				<contact-email>mik7@cornell.edu</contact-email>
+				<contact-phone>607-255-2364</contact-phone>
+				<contact-report>false</contact-report>
+				<contact-type>director</contact-type>
+			</contact>
+		</contacts>
+	</Repository>
+
+
 	<Repository id="CMMR">
 		<logicaldb>71</logicaldb>
 		<strainidprefix>CMMR</strainidprefix>
@@ -588,6 +625,12 @@
 		<fax>+86-18951679920</fax>
 		<contacts>
 			<contact>
+				<contact-name>Jingjing Li</contact-name>
+				<contact-email>lijj1@nbri-nju.com</contact-email>
+				<contact-report>true</contact-report>
+				<contact-type>animal resource Manager</contact-type>
+			</contact>
+			<contact>
 				<!-- First Name: Yaqing -->
 				<contact-name>Liu Yaqing</contact-name>
 				<contact-phone>+86-25-58641533</contact-phone>
@@ -600,14 +643,12 @@
 				<!-- email bounced: 11-3-2016 -->
 				<contact-name>Haibo Gao</contact-name>
 				<contact-email>gaohb@nicemice.cn</contact-email>
-				<contact-report>true</contact-report>
 				<contact-type>IT engineer</contact-type>
 			</contact>
 			<contact>
 				<!-- email bounced: 11-3-2016 -->
 				<contact-name>Xin Xu</contact-name>
 				<contact-email>xuxin@nicemice.cn</contact-email>
-				<contact-report>true</contact-report>
 				<contact-type>secondary</contact-type>
 			</contact>
 			<contact>
