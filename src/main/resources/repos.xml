@@ -131,7 +131,7 @@
 		<postalcode>14853</postalcode>
 		<country>USA</country>
 		<email>chromus@cornell.edu</email>
-		<phone></phone>
+		<phone>607-253-4278</phone>
 		<fax></fax>
 		<contacts>
 			<contact>
@@ -733,6 +733,7 @@
 
 	<Repository id="RBRC">
 		<logicaldb>70</logicaldb>
+		<idalias>RIKENBRC</idalias>
 		<strainurl></strainurl>
 		<orderurl>http://www.brc.riken.jp/lab/animal/en/dist.shtml</orderurl>
 		<homepage>http://www.brc.riken.jp/lab/animal/en/</homepage>
@@ -772,6 +773,7 @@
 
 	<Repository id="RMRC-NLAC">
 		<logicaldb>153</logicaldb>
+		<idalias>RMRC</idalias>
 		<strainurl></strainurl>
 		<orderurl>http://www.nlac.org.tw/rmrc/webe/html/services/02.aspx</orderurl>
 		<homepage>http://www.nlac.org.tw/RMRC/index_e.aspx</homepage>
