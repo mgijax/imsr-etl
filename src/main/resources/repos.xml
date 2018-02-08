@@ -928,6 +928,36 @@
 	</Repository>
 
 
+	<Repository id="UNC">
+		<logicaldb>208</logicaldb>
+		<strainidprefix>UNC</strainidprefix>
+		<strainurl></strainurl>
+		<orderurl>http://csbio.unc.edu/CCstatus/index.py?run=contact</orderurl>
+		<homepage>http://csbio.unc.edu/CCstatus/index.py</homepage>
+		<name>University of North Carolina, Chapel Hill - Systems Genetics Core</name>
+		<address1>120 Mason Farm Road</address1>
+		<address2>5047 Genetic Medicine Building, CB #7264</address2>
+		<address3>University of North Carolina, Chapel Hill</address3>
+		<city>Chapel Hill</city>
+		<state>NC</state>
+		<postalcode>27599-7264</postalcode>
+		<country>USA</country>
+		<email>millerdr@med.unc.edu</email>
+		<phone>919-843-6471</phone>
+		<fax></fax>
+		<contacts>
+			<contact>
+				<contact-name>Darla Miller</contact-name>
+				<contact-phone>919-843-6471</contact-phone>
+				<contact-fax></contact-fax>
+				<contact-email>darla_miller@med.unc.edu</contact-email>
+				<contact-report>true</contact-report>
+				<contact-type></contact-type>
+			</contact>
+		</contacts>
+	</Repository>
+
+
 <!--
 ###  orderurl doesn't make sense and is a redirected link
 ###  funny looking email too
