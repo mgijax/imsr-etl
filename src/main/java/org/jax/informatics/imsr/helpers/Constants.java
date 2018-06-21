@@ -73,6 +73,7 @@ public class Constants {
 		mtMap.put("CI", "chemically induced mutation");
 		mtMap.put("DEL", "deletion");
 		mtMap.put("DP", "duplication");
+		mtMap.put("EMM", "endonuclease mediated mutation");
 		mtMap.put("GT", "gene trap");
 		mtMap.put("INS", "insertion");
 		mtMap.put("INV", "inversion");
