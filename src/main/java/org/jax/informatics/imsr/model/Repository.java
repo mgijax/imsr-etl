@@ -432,11 +432,8 @@ public class Repository {
 		System.out.println(".");
 	}
 
-	public boolean isValidForSolr() {
-		System.out.println(id + ": " + invalidRecords.size() + " invalid entries" + ".");
-		
-		Integer limit = Math.min(Constants.MAX_RECORDS_TO_TEST, Math.max(records.size(), records.size()/10));
-		return invalidRecords.size() < (limit * Constants.VALID_SUBMISSION_THRESHOLD);
+	public boolean isValidForSolr() {		
+		return (invalidRecords.size() / records.size()) < Constants.VALID_SUBMISSION_THRESHOLD;
 	}
 	
 	
