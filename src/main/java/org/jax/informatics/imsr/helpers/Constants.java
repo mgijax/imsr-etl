@@ -2,7 +2,9 @@ package org.jax.informatics.imsr.helpers;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.jax.informatics.imsr.model.ImsrEmailContact;
 
@@ -87,6 +89,22 @@ public class Constants {
 		mtMap.put("TM", "targeted mutation");
 		mtMap.put("TP", "transposition");
 		MUTATION_TYPES = Collections.unmodifiableMap(mtMap);
+	}
+	
+	public static final Set<String> FAUX_SYMBOLS;
+	static
+	{
+		Set<String> fsSet = new HashSet<String>();
+		fsSet.add("CAG");		// CMV-IE enhancer/chicken beta-actin/rabbit beta-globin hybrid promoter
+		fsSet.add("CFP");		// Cyan Fluorescent Protein
+		fsSet.add("CRE");		// cre recombinase
+		fsSet.add("EGFP");		// enhanced green fluorescent protein
+		fsSet.add("FLP");		// FLP recombinase
+		fsSet.add("GFP");		// Green Fluorescent Protein
+		fsSet.add("RFP");		// Red Fluorescent Protein
+		fsSet.add("VENUS");		// Green Fluorescent Protein, F46L
+		fsSet.add("YFP");		// Yellow Fluorescent Protein
+		FAUX_SYMBOLS = Collections.unmodifiableSet(fsSet);
 	}
 	
 	public static final Map<String,String> SOLR_SERVERS;

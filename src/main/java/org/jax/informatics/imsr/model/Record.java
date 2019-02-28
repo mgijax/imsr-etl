@@ -471,6 +471,17 @@ public class Record {
 			geneName = withdrawnMarkersMap.get(geneSymbol);
 		}
 	}
+	
+	public void removeFauxSymbols() {
+		if (geneSymbol != null && !geneSymbol.isEmpty() && Constants.FAUX_SYMBOLS.contains(geneSymbol.toUpperCase())) {
+			geneSymbol = null;
+			geneName = null;
+		}
+		if (alleleSymbol != null && !alleleSymbol.isEmpty() && Constants.FAUX_SYMBOLS.contains(alleleSymbol.toUpperCase())) {
+			alleleSymbol = null;
+			alleleName = null;
+		}
+	}
 
 	/**
 	 * Insert id in strain url

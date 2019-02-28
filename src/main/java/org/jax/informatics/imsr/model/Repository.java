@@ -325,6 +325,7 @@ public class Repository {
 	
 	public void transformRecords(MgdMaps alleleMgdMaps, MgdMaps geneMdgMaps, List<String> recombinaseAlleleList, HashMap<String, String> withdrawnMarkersMap) {		
 		for (Record r : records) {
+			r.removeFauxSymbols();
 			r.transformUrl(this.strainurl);
 			r.transformAllele(alleleMgdMaps, recombinaseAlleleList);
 			r.transformGene(geneMdgMaps, withdrawnMarkersMap);
