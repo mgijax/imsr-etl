@@ -25,9 +25,9 @@ public class Constants {
 	public static final String IMSR_EMAIL_NAME = "IMSR Administrator";
 	
 	public static final ImsrEmailContact[] IMSR_CURATORS_LIST = {
-		new ImsrEmailContact("cynthia.smith@jax.org", "Cynthia Smith"), 
-		new ImsrEmailContact("beverly.richards-smith@jax.org", "Beverly Richards-Smith"),
-		new ImsrEmailContact("howie.motenko@jax.org", "Howie Motenko")
+		new ImsrEmailContact("Cynthia.Smith@jax.org", "Cynthia Smith"), 
+		new ImsrEmailContact("Michelle.Perry@jax.org", "Michelle Perry"),
+		new ImsrEmailContact("Howie.Motenko@jax.org", "Howie Motenko")
 	};
 	
 	public static final Map<String,String> STRAIN_STATES;
