@@ -1,8 +1,10 @@
 package org.jax.informatics.imsr.helpers;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +25,9 @@ public class Constants {
 	
 	public static final String IMSR_EMAIL_CONTACT = "imsr-admin@jax.org";
 	public static final String IMSR_EMAIL_NAME = "IMSR Administrator";
+	
+	// the 'EI' does not add the repo as a prefix for the strain ids (this is legacy behavior)
+	public static final List<String> NO_PREFIX_STRAIN_IDS = Collections.unmodifiableList(Arrays.asList("CARD", "JAX"));
 	
 	public static final ImsrEmailContact[] IMSR_CURATORS_LIST = {
 		new ImsrEmailContact("Cynthia.Smith@jax.org", "Cynthia Smith"), 

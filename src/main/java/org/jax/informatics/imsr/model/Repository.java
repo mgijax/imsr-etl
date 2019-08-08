@@ -378,8 +378,9 @@ public class Repository {
 			Strain s = entry.getValue();
 			
 			s.addSynonyms(synonymsMap, inverseSynonymsMap, repoNomenclatureMap);
-			s.addNomenclatureFlag(allNomenclaturesList, repoNomenclatureMap, this.id);
 			s.addPrefixId(this.strainidprefix);
+			s.addMgdLookupId(this.strainidprefix);
+			s.addNomenclatureFlag(allNomenclaturesList, repoNomenclatureMap, this.id);
 		}
 	}
 	
@@ -580,7 +581,7 @@ public class Repository {
 				message += strainsWithImsrMessages.size() + Utilities.pluralSuffix(strainsWithImsrMessages.size(), " strain", " strains") + " listed below for your review.\n\n";
 		
 				for (Strain s : strainsWithImsrMessages) {
-					message += "Strain ID: " + s.getId() + " " + s.getImsrMessage() + "\n";
+					message += "Strain ID: " + s.getMgdLookupId() + " " + s.getImsrMessage() + "\n";
 				}
 				
 				email.setMessage(message);

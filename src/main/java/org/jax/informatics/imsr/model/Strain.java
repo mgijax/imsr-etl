@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jax.informatics.imsr.helpers.Constants;
+
 public class Strain {
 	
 	private String id;
@@ -16,6 +18,7 @@ public class Strain {
 	private String chromosome;
 	
 	private String prefixId;
+	private String mgdLookupId;
 	private Character nomenclatureFlag;
 	private String imsrMessage = null;
 	private Set<String> synonyms = new HashSet<String>();
@@ -66,6 +69,10 @@ public class Strain {
 		return prefixId;
 	}
 
+	public String getMgdLookupId() {
+		return mgdLookupId;
+	}
+
 	public String getImsrMessage() {
 		return imsrMessage;
 	}
@@ -83,13 +90,18 @@ public class Strain {
 	}
 	
 	public void addNomenclatureFlag(List<String> allNomenclaturesList, HashMap<String, String> repoNomenclatureMap, String repoId) {		
-		String mgdMappedStrainName = repoNomenclatureMap.get(id);
+		// Note: We should be searching for the prefixId instead of the mgdLookupId,
+		//       but currently the 'EI' has not added prefixes to CARD and JAX strains.
+		//       That is a larger conversation, because MGI has added the 'JAX:' prefix 
+		//       in their code to compensate for this situation.
+		
+		String mgdMappedStrainName = repoNomenclatureMap.get(mgdLookupId);
 		Boolean foundStrainNameInMgd = allNomenclaturesList.contains(name);
 
 		if ((mgdMappedStrainName != null) && mgdMappedStrainName.equals(name)) {
 			// id maps to correct name in repo data (from mgd)
 			nomenclatureFlag = '+';
-		} else if (repoNomenclatureMap.containsKey(id) || foundStrainNameInMgd) {
+		} else if (repoNomenclatureMap.containsKey(mgdLookupId) || foundStrainNameInMgd) {
 			// mgd has some information, but not a direct mapping
 			nomenclatureFlag = '-';
 			
@@ -139,6 +151,17 @@ public class Strain {
 		}
 		
 		this.prefixId = prefix + this.id;		
+	}
+
+
+	public void addMgdLookupId(String strainidprefix) {
+		String prefix = "";
+		
+		if ((strainidprefix != null) && (!Constants.NO_PREFIX_STRAIN_IDS.contains(strainidprefix))) {
+			prefix = strainidprefix + ":";
+		}
+		
+		this.mgdLookupId = prefix + this.id;		
 	}
 
 

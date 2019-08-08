@@ -44,6 +44,7 @@ public class Etl {
 	private static String cliSolrServerType = null;
 	private static Boolean cliSkipUrlTest = false;
 	private static Boolean cliForce = false;
+	private static Boolean cliNoRepoEmail = false;
 	
 	private static Logger logger = LoggerFactory.getLogger(Etl.class);
 
@@ -55,7 +56,7 @@ public class Etl {
 		if (parseCommandLine(args)) {
 			collectCommonData();
 			markReposForUpdate();
-			updateRepos(cliSolrServerType, cliSkipUrlTest, cliForce);
+			updateRepos(cliSolrServerType, cliSkipUrlTest, cliForce, cliNoRepoEmail);
 
 			System.out.println("Completed indexing all repositories.");
 		}
@@ -70,6 +71,7 @@ public class Etl {
 		options.addOption("noUrlTesting", false, "skip url validation testing");
 		options.addOption("d", true, "directory of files, ");
 		options.addOption("force", false, "always load file - regardless of errors");
+		options.addOption("noRepoEmail", false, "do not notify repo status - for developer reloading repo data");
 		
 		Option fileListOption = new Option("f", true, "list of files");
 		fileListOption.setArgs(Option.UNLIMITED_VALUES);
@@ -122,6 +124,7 @@ public class Etl {
 		}
 		
 		
+		cliNoRepoEmail = line.hasOption("noRepoEmail");
 		cliSkipUrlTest = line.hasOption("noUrlTesting");
 		cliForce = line.hasOption("force");
 		if (cliForce) {
@@ -210,7 +213,7 @@ public class Etl {
 		}
 	}
 	
-	private static void updateRepos(String solrServerType, Boolean skipUrlTest, Boolean cliForce) throws IOException {
+	private static void updateRepos(String solrServerType, Boolean skipUrlTest, Boolean cliForce, Boolean cliNoRepoEmail) throws IOException {
 		logger.debug("Entered: updateRepos");
 		
 		HashMap<String, String> repoNomenclatureMap;
@@ -237,9 +240,10 @@ public class Etl {
 					}
 				}
 
-				Boolean sendPublicEmail = cliSolrServerType.equals("PUBLIC");
-				repository.emailUploadStatusReport(sendPublicEmail);
-				repository.emailImsrCuratorReport(sendPublicEmail);
+				Boolean sendRepoPublicEmail = cliSolrServerType.equals("PUBLIC") && !cliNoRepoEmail;
+				Boolean sendCuratorPublicEmail = cliSolrServerType.equals("PUBLIC");
+				repository.emailUploadStatusReport(sendRepoPublicEmail);
+				repository.emailImsrCuratorReport(sendCuratorPublicEmail);
 			}
 		}
 	}

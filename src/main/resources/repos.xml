@@ -3,7 +3,8 @@
 	<Repository id="APB">
 		<logicaldb>90</logicaldb>
 		<strainidprefix>APB</strainidprefix>
-		<strainurl>http://pb.apf.edu.au/phenbank/strain.html?id=###STRAINURL###</strainurl>
+		<!--		<strainurl>http://pb.apf.edu.au/phenbank/strain.html?id=###STRAINURL###</strainurl>  -->
+		<strainurl></strainurl>
 		<orderurl></orderurl>
 		<homepage>http://pb.apf.edu.au</homepage>
 		<name>Australian Phenome Bank</name>
@@ -236,6 +237,37 @@
 			</contact>
 		</contacts>
 	</Repository>
+
+
+        <Repository id="CWR">
+                <logicaldb>215</logicaldb>
+                <strainidprefix>CWR</strainidprefix>
+                <strainurl></strainurl>
+                <orderurl></orderurl>
+                <homepage>http://www.cfmice.org/</homepage>
+                <name>Cystic Fibrosis Mouse Model Core</name>
+                <address1>Case Western Reserve University</address1>
+                <address2>2109 Adelbert Road</address2>
+                <address3></address3>
+                <city>Cleveland</city>
+                <state>OH</state>
+                <postalcode>44106-4948</postalcode>
+                <country>USA</country>
+                <email>cfmice@case.edu</email>
+                <phone>216-368-0008</phone>
+                <fax></fax>
+                <contacts>
+                        <contact>
+                                <contact-name>Craig Hodges</contact-name>
+                                <contact-mobile></contact-mobile>
+                                <contact-phone>216-368-0008</contact-phone>
+                                <contact-fax></contact-fax>
+                                <contact-email>craig.hodges@case.edu</contact-email>
+                                <contact-report>true</contact-report>
+                                <contact-type>director</contact-type>
+                         </contact>
+                </contacts>
+        </Repository>
 
 
 	<!-- previous website: www.emmanet.org redirects to the www.infrafrontier.eu website (2/27/2014) -->
@@ -624,6 +656,18 @@
 		<phone>+86-25-58641533</phone>
 		<fax>+86-18951679920</fax>
 		<contacts>
+            <contact>
+                <contact-name>Ziyan Qiu</contact-name>
+                <contact-email>qiuzy@nbri-nju.com</contact-email>
+				<contact-report>true</contact-report>
+				<contact-type>developer</contact-type>
+			</contact>
+			<contact>
+				<contact-name>Mingzhu Xu</contact-name>
+				<contact-email>xumz@nbri-nju.com</contact-email>
+				<contact-report>true</contact-report>
+				<contact-type>animal resource Manager</contact-type>
+			</contact>
 			<contact>
 				<contact-name>Jingjing Li</contact-name>
 				<contact-email>lijj1@nbri-nju.com</contact-email>
@@ -638,25 +682,6 @@
 				<contact-email>liuyq@nbri-nju.com</contact-email>
 				<contact-report>true</contact-report>
 				<contact-type>developer</contact-type>
-			</contact>
-			<contact>
-				<!-- email bounced: 11-3-2016 -->
-				<contact-name>Haibo Gao</contact-name>
-				<contact-email>gaohb@nicemice.cn</contact-email>
-				<contact-type>IT engineer</contact-type>
-			</contact>
-			<contact>
-				<!-- email bounced: 11-3-2016 -->
-				<contact-name>Xin Xu</contact-name>
-				<contact-email>xuxin@nicemice.cn</contact-email>
-				<contact-type>secondary</contact-type>
-			</contact>
-			<contact>
-				<!-- email bounced: 11-3-2016 -->
-				<contact-name>Liu Yang</contact-name>
-				<contact-phone>+86-25-58641533</contact-phone>
-				<contact-fax>+86-25-58641551</contact-fax>
-				<contact-email>liuyang@nicemice.cn</contact-email>
 			</contact>
 			<contact>
 				<contact-name>Zhao Jing</contact-name>
