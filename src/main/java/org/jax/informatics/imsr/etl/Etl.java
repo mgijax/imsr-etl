@@ -230,7 +230,7 @@ public class Etl {
 					repository.testStrainUrls();
 				}
 
-				if (repository.isValidForSolr() || cliForce) {
+				if (repository.hasRecords() && (repository.isValidForSolr() || cliForce)) {
 					repoNomenclatureMap = MGDConnection.getRepoNomenclature(repository.getLogicalDB());
 
 					repository.aggregateStrains();

@@ -434,7 +434,11 @@ public class Repository {
 		System.out.println(".");
 	}
 
-	public boolean isValidForSolr() {		
+	public boolean hasRecords() {
+		return !records.isEmpty();
+	}
+	
+	public boolean isValidForSolr() {
 		return (invalidRecords.size() / records.size()) < Constants.VALID_SUBMISSION_THRESHOLD;
 	}
 	
@@ -485,7 +489,7 @@ public class Repository {
 		} 
 		
 		Boolean meetsThreshold = meetsStrainCountThreshold();
-		Boolean validDataFile = isValidForSolr() && meetsThreshold;
+		Boolean validDataFile = hasRecords() && isValidForSolr() && meetsThreshold;
 		String subjectStatus = validDataFile ? "Succeeded" : "FAILED";
 		email.setSubjet(subjectStatus + " - IMSR file submission: " + this.file.getName());
 
