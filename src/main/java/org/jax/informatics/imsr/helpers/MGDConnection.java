@@ -251,9 +251,10 @@ public class MGDConnection {
 		               "FROM ACC_Accession acc, ALL_Allele a " +
     			       "WHERE acc._mgitype_key = 11 " +
     			       "AND acc._object_key = a._allele_key " +
-    			       "AND acc.private = 0" +
-    			       "AND acc.prefixpart = 'MGI:'";
-    	
+    			       "AND acc.private = 0 " +
+    			       "AND acc._logicaldb_key = 1 " + 
+    			       "AND acc.preferred = 1 ";
+    	    	
     	Boolean lowercaseSymbol = true;
 		return getMgdMaps(query, lowercaseSymbol);
 	}
@@ -268,8 +269,9 @@ public class MGDConnection {
 		               "FROM ACC_Accession acc, MRK_Marker m " +
     			       "WHERE acc._mgitype_key = 2 " +
     			       "AND acc._object_key = m._marker_key " +
-    			       "AND acc.private = 0" +
-    			       "AND acc.prefixpart = 'MGI:'";
+    			       "AND acc.private = 0 " +
+    			       "AND acc._logicaldb_key = 1 " + 
+    			       "AND acc.preferred = 1 ";
     	    	
 	   	Boolean lowercaseSymbol = false;
 		return getMgdMaps(query, lowercaseSymbol);
