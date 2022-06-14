@@ -510,21 +510,11 @@ public class Repository {
 		if (warningRecords.size() > 0 || invalidRecords.size() > 0) {
 			message += "This submission contained " + warningRecords.size() + Utilities.pluralSuffix(warningRecords.size(), " warning", " warnings");
 			message += " and " + invalidRecords.size() + Utilities.pluralSuffix(invalidRecords.size(), " entry has", " entries have") + " been rejected due to errors.\n";
+			message += "\n" + "For more information, visit the IMSR submission format page: http://www.findmice.org/participate";
 		}
 		
 		if (invalidRecords.size() > 0) {
-			message += "\n" + "Attached is the IMSR file format guide for your reference.\n\nPlease resolve the " + Utilities.pluralSuffix(invalidRecords.size(), "error", "errors") + " listed below and resubmit your submission file:\n";
-			
-			try {
-				ImsrEmailAttachment attachment = new ImsrEmailAttachment();
-				attachment.setUrl(new URL("http://www.findmice.org/assets/etc/IMSRFileFormat.pdf"));
-				attachment.setDescription("IMSR_File_Format_Guide.pdf");
-				attachment.setName("IMSR_File_Format_Guide.pdf");
-				
-				email.addAttachment(attachment);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			message += "\n\nPlease resolve the " + Utilities.pluralSuffix(invalidRecords.size(), "error", "errors") + " listed below and resubmit your submission file:\n";
 		}
 		
 		for (Record r : this.getInvalidRecords()) {

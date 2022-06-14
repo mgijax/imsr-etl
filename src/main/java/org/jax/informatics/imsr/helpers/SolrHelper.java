@@ -16,7 +16,7 @@ public class SolrHelper {
 	public SolrHelper(String solrClientType) {
 		if (Constants.SOLR_SERVERS.containsKey(solrClientType)) {
 			String url = Constants.SOLR_SERVERS.get(solrClientType);
-			this.solrClient = new HttpSolrClient(url);
+			this.solrClient = new HttpSolrClient.Builder(url).build();
 		}
 	}
 	
