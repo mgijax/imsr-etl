@@ -33,7 +33,11 @@ public class SolrHelper {
 		try {			
 			solrClient.deleteByQuery(String.format("provider:%s", repositoryId));
 			solrClient.commit();
-		} catch (SolrServerException | IOException e) {
+		} catch (SolrServerException e) {
+			System.out.println("Solr Server Exception:");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("IO Exception:");
 			e.printStackTrace();
 		}
 	}
@@ -54,7 +58,11 @@ public class SolrHelper {
 			SolrQuery q = new SolrQuery("provider:" + repositoryId);
 			q.setRows(0);
 			strainCount = solrClient.query(q).getResults().getNumFound();
-		} catch (SolrServerException | IOException e) {
+		} catch (SolrServerException e) {
+			System.out.println("Solr Server Exception:");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("IO Exception:");
 			e.printStackTrace();
 		}
 		return strainCount;
@@ -74,7 +82,11 @@ public class SolrHelper {
 			solrClient.addBeans(solrStrains);
 			solrClient.optimize();
 			solrClient.commit();
-		} catch (SolrServerException | IOException e) {
+		} catch (SolrServerException e) {
+			System.out.println("Solr Server Exception:");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("IO Exception:");
 			e.printStackTrace();
 		}
 	}
