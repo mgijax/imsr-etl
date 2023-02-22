@@ -24,8 +24,6 @@ import org.jax.informatics.imsr.model.MgiFeature;
 import org.jax.informatics.imsr.model.Repositories;
 import org.jax.informatics.imsr.model.Repository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Etl {
 
@@ -46,8 +44,6 @@ public class Etl {
 	private static Boolean cliForce = false;
 	private static Boolean cliNoRepoEmail = false;
 	
-	private static Logger logger = LoggerFactory.getLogger(Etl.class);
-
 	public Etl() {
 	}
 
@@ -62,9 +58,7 @@ public class Etl {
 		}
 	}
 
-	private static boolean parseCommandLine(String[] args) {
-		logger.debug("Entered parseCommandLine");
-		
+	private static boolean parseCommandLine(String[] args) {		
 		Options options = new Options();
 		options.addOption("h", false, "print this message");
 		options.addOption("s", true, "solr server to write to [dev,test,public]");
@@ -154,9 +148,7 @@ public class Etl {
 		return fileList;
 	}
 
-	private static void collectCommonData() {
-		logger.debug("Entered: collectCommonData");
-		
+	private static void collectCommonData() {		
 		// import repository meta data
 		repos.importRepositories(new File(Constants.REPOSITORY_META_DATA_FILENAME));
 
@@ -213,9 +205,7 @@ public class Etl {
 		}
 	}
 	
-	private static void updateRepos(String solrServerType, Boolean skipUrlTest, Boolean cliForce, Boolean cliNoRepoEmail) throws IOException {
-		logger.debug("Entered: updateRepos");
-		
+	private static void updateRepos(String solrServerType, Boolean skipUrlTest, Boolean cliForce, Boolean cliNoRepoEmail) throws IOException {		
 		HashMap<String, String> repoNomenclatureMap;
 		SolrHelper solrHelper = new SolrHelper(solrServerType);
 		
