@@ -61,7 +61,7 @@ public class Etl {
 	private static boolean parseCommandLine(String[] args) {		
 		Options options = new Options();
 		options.addOption("h", false, "print this message");
-		options.addOption("s", true, "solr server to write to [dev,test,public]");
+		options.addOption("s", true, "solr server to write to [dev, test, test2, public]");
 		options.addOption("noUrlTesting", false, "skip url validation testing");
 		options.addOption("d", true, "directory of files, ");
 		options.addOption("force", false, "always load file - regardless of errors");
