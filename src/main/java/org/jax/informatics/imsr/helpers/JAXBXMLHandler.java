@@ -3,9 +3,9 @@ package org.jax.informatics.imsr.helpers;
 import java.io.File;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 import org.jax.informatics.imsr.model.Repositories;
 import org.jax.informatics.imsr.model.Repository;;
