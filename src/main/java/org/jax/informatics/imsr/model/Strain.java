@@ -14,6 +14,7 @@ public class Strain {
 	private Set<String> types = new HashSet<String>();
 	private Set<String> states = new HashSet<String>();
 	private String url;
+	private String orderLink;
 	private Set<Mutation> mutations = new HashSet<Mutation>();
 	private String chromosome;
 	
@@ -31,6 +32,7 @@ public class Strain {
 		this.id = r.getId();
 		this.name = r.getName();
 		this.url = r.getUrl();
+		this.orderLink = r.getOrderLink();
 		this.chromosome = r.getChromosome();
 
 		this.addRecord(r);
@@ -55,6 +57,10 @@ public class Strain {
 
 	public String getUrl() {
 		return url;
+	}
+
+	public String getOrderLink() {
+		return orderLink;
 	}
 
 	public Set<Mutation> getMutations() {
