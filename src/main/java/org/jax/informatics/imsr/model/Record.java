@@ -415,7 +415,7 @@ public class Record {
 	}
 
 	public void validateName() {
-		if (this.id == null || this.id.isEmpty()) {
+		if (this.name == null || this.name.isEmpty()) {
 			this.addError("Strain Name: is a required field");
 		}
 	}
