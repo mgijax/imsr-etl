@@ -25,6 +25,7 @@ public class Record {
 	private String mgiGeneAccId;
 	private String geneSymbol;
 	private String geneName;
+	private String orderLink;
 	private List<String> errors = new ArrayList<String>();
 	private List<String> warnings = new ArrayList<String>();
 
@@ -50,6 +51,10 @@ public class Record {
 
 	public String getUrl() {
 		return url;
+	}
+
+	public String getOrderLink() {
+		return orderLink;
 	}
 
 	public String getMgiAlleleAccId() {
@@ -132,6 +137,10 @@ public class Record {
 		this.url = url;
 	}
 
+	public void setOrderLink(String orderLink) {
+		this.orderLink = orderLink;
+	}
+
 	public void setMgiAlleleAccId(String mgiAlleleAccId) {
 		this.mgiAlleleAccId = mgiAlleleAccId;
 	}
@@ -173,6 +182,7 @@ public class Record {
 	}
 
 
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -211,6 +221,11 @@ public class Record {
 			if (other.geneSymbol != null)
 				return false;
 		} else if (!geneSymbol.equals(other.geneSymbol))
+			return false;
+		if (orderLink == null) {
+			if (other.orderLink != null)
+				return false;
+		} else if (!orderLink.equals(other.orderLink))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -266,8 +281,8 @@ public class Record {
 		return "Record [id=" + id + ", name=" + name + ", types=" + types + ", states=" + states + ", url=" + url
 				+ ", mgiAlleleAccId=" + mgiAlleleAccId + ", alleleSymbol=" + alleleSymbol + ", alleleName=" + alleleName
 				+ ", mutationTypes=" + mutationTypes + ", chromosome=" + chromosome + ", mgiGeneAccId=" + mgiGeneAccId
-				+ ", geneSymbol=" + geneSymbol + ", geneName=" + geneName + ", errors=" + errors + ", warnings="
-				+ warnings + "]";
+				+ ", geneSymbol=" + geneSymbol + ", geneName=" + geneName + ", orderLink=" + orderLink + ", errors=" + errors
+				+ ", warnings=" + warnings + "]";
 	}
 
 	
@@ -332,6 +347,10 @@ public class Record {
 		
 		if (values.length > 11 + urlOffset) {
 			record.setGeneName(values[11 + urlOffset]);
+		}
+		
+		if (values.length > 12 + urlOffset) {
+			record.setOrderLink(values[12 + urlOffset]);
 		}
 		
 		return record;
@@ -488,9 +507,33 @@ public class Record {
 	 * 
 	 * @param strainUrl	- url string for insertion of id
 	 */
-	public void transformUrl(String strainUrl) {
+	public void transformStrainUrl(String strainUrl) {
 		if (strainUrl != null && !strainUrl.isEmpty()) {
 			url = strainUrl.replace("###STRAINURL###", id);
+		}
+	}
+
+	/**
+	 * Insert id in order url
+	 * 
+	 * There are two ways orderLinks are created:
+	 *   A. Repo provides an unique url for each strain in their submission file (eg; EMMA)
+	 *   B. Repo provides an url template for strain id's to be inserted (eg: JAX)
+	 *   
+	 * If A, then keep the orderLink from the submission file (not overwritten)
+	 * If B, then replace the orderUrl with the inserted id
+	 * 
+	 * orderLink - url for a single record
+	 * orderUrl  - url template for entire repo
+	 * 
+	 * 
+	 * @param orderUrl - url string for insertion of id
+ 	 */
+	public void transformOrderUrl(String orderUrl) {
+		if (orderLink == null || orderLink.isEmpty()) {
+			if (orderUrl != null && !orderUrl.isEmpty()) {
+				orderLink = orderUrl.replace("@@@@", id);
+			}
 		}
 	}
 

@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -16,11 +14,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.jax.informatics.imsr.helpers.Constants;
 import org.jax.informatics.imsr.helpers.SolrHelper;
@@ -89,15 +87,15 @@ public class Repository {
 		return strainurl;
 	}
 
-	public void setStrainurl(String strainurl) {
+	public void setStrainUrl(String strainurl) {
 		this.strainurl = strainurl;
 	}
 
-	public String getOrderurl() {
+	public String getOrderUrl() {
 		return orderurl;
 	}
 
-	public void setOrderurl(String orderurl) {
+	public void setOrderUrl(String orderurl) {
 		this.orderurl = orderurl;
 	}
 
@@ -326,7 +324,8 @@ public class Repository {
 	public void transformRecords(MgdMaps alleleMgdMaps, MgdMaps geneMdgMaps, List<String> recombinaseAlleleList, HashMap<String, String> withdrawnMarkersMap) {		
 		for (Record r : records) {
 			r.removeFauxSymbols();
-			r.transformUrl(this.strainurl);
+			r.transformStrainUrl(this.strainurl);
+			r.transformOrderUrl(this.orderurl);
 			r.transformAllele(alleleMgdMaps, recombinaseAlleleList);
 			r.transformGene(geneMdgMaps, withdrawnMarkersMap);
 			

@@ -38,6 +38,9 @@ public class Solr3Strain {
 	@Field("strain_url")
 	private String url;
 	
+	@Field("strain_orderLink")
+	private String orderLink;
+	
 	@Field("gene_names")
 	private Set<String> geneNames = new HashSet<String>();
 	
@@ -78,6 +81,7 @@ public class Solr3Strain {
 		this.states.addAll(strain.getStates());
 		this.types.addAll(strain.getTypes());
 		this.url = strain.getUrl();
+		this.orderLink = strain.getOrderLink();
 		this.date = repository.getFileLastModified();
 		
 		for (Mutation m : strain.getMutations()) {
@@ -154,6 +158,10 @@ public class Solr3Strain {
 
 	public String getUrl() {
 		return url;
+	}
+
+	public String getOrderLink() {
+		return orderLink;
 	}
 
 	public Set<String> getGeneNames() {
