@@ -18,10 +18,10 @@ import org.jax.informatics.imsr.model.MgiFeature;
 
 public class MGDConnection {
 
-	private static String url = "jdbc:postgresql://mgi-adhoc.jax.org/mgd";
+	private static String url = "jdbc:postgresql://bhmgidb07ld.jax.org/pub";
 	
     /**
-     * Runs a sql query on server (adhoc) and returns a result set.
+     * Runs a sql query on mgi database and returns a result set.
      * 
      * @param query	- sql query string to run on server
      * @return		the result set from running the query on the server

@@ -65,7 +65,8 @@
   	<dependency>
   		<groupId>org.postgresql</groupId>
   		<artifactId>postgresql</artifactId>
-  		<version>9.3-1104-jdbc41</version>
+  		<!-- <version>9.3-1104-jdbc41</version> -->
+  		<version>42.7.5</version>
   	</dependency>
   	<dependency>
   		<groupId>com.sun.xml.bind</groupId>
